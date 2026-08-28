@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Transformate | Empieza a transformarte</title>
+
+  <meta name="description"
+        content="Ideas, herramientas, experiencias y libros para convertirte en la persona que quieres ser.">
+
+  <style>
+
+:root {
+  --fondo: #080b0a;
+  --tarjeta: #111715;
+  --texto: #f5f7f6;
+  --gris: #aeb8b3;
+  --verde: #65A9D4;
+  --verde-hover: #78B8DF;
+  --borde: rgba(255,255,255,.09);
+}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(84,227,154,.15),
+          transparent 38%
+        ),
+        var(--fondo);
+      color: var(--texto);
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .contenedor {
+      width: min(1080px, 92%);
+      margin: auto;
+    }
+
+    /* HERO */
+
+    header {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero {
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+.marca { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 14px; 
+  font-size: clamp(2.5rem, 6vw, 5rem); 
+  font-weight: 800; 
+  letter-spacing: .12em; 
+  color: var(--white); 
+  text-transform: uppercase; 
+  margin-bottom: 22px; 
+}
+.punto {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--verde);
+  box-shadow: 0 0 24px rgba(84,227,154,.8);
+}
+.punto-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+.logo img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  display: block;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: .92;
+      letter-spacing: -.055em;
+      margin-bottom: 26px;
+      color: var(--verde);
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto 34px;
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      color: var(--gris);
+    }
+
+    /* BOTONES */
+
+    .boton {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 52px;
+      padding: 0 26px;
+      border-radius: 999px;
+      font-weight: bold;
+      transition: .2s ease;
+      text-align: center;
+    }
+
+    .boton-principal {
+      background: var(--verde);
+      color: #06110b;
+    }
+
+    .boton-principal:hover {
+      transform: translateY(-2px);
+      background: var(--verde-hover);
+    }
+
+    .boton-secundario {
+      border: 1px solid rgba(84,227,154,.45);
+      color: var(--verde);
+      background: rgba(84,227,154,.05);
+    }
+
+    .boton-secundario:hover {
+      transform: translateY(-2px);
+      background: rgba(84,227,154,.1);
+    }
+
+    .bajar {
+      display: block;
+      margin-top: 38px;
+      color: #7e8984;
+      font-size: .85rem;
+    }
+
+    /* SECCIONES */
+
+    section {
+      padding: 90px 0;
+    }
+
+    .encabezado {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .etiqueta {
+      color: var(--verde);
+      font-size: .78rem;
+      font-weight: bold;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: -.035em;
+    }
+
+    .encabezado p {
+      max-width: 650px;
+      margin: 14px auto 0;
+      color: var(--gris);
+    }
+
+    /* EXPERIENCIA */
+
+    .experiencia {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .tarjeta {
+      background: linear-gradient(
+        145deg,
+        #151c19,
+        var(--tarjeta)
+      );
+      border: 1px solid var(--borde);
+      border-radius: 28px;
+      overflow: hidden;
+    }
+
+    .texto-experiencia {
+      padding: 42px;
+    }
+
+    .texto-experiencia h3 {
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.05;
+      margin-bottom: 18px;
+    }
+
+    .texto-experiencia p {
+      color: var(--gris);
+      margin-bottom: 25px;
+    }
+
+    .puntos {
+      list-style: none;
+      display: grid;
+      gap: 11px;
+      margin-bottom: 28px;
+    }
+
+    .puntos li::before {
+      content: "✓";
+      color: var(--verde);
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    /* VISUAL */
+
+    .visual {
+      min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(
+          circle at 50% 35%,
+          rgba(84,227,154,.22),
+          transparent 32%
+        ),
+        linear-gradient(145deg,#121b17,#0c100f);
+      border: 1px solid var(--borde);
+      border-radius: 28px;
+    }
+
+    .telefono {
+      width: 220px;
+      aspect-ratio: 9 / 17;
+      border: 7px solid #242d29;
+      border-radius: 30px;
+      background: #07100b;
+      padding: 18px 14px;
+      box-shadow: 0 25px 60px rgba(0,0,0,.5);
+      transform: rotate(-5deg);
+    }
+
+    .telefono-pequeno {
+      font-size: .7rem;
+      color: var(--verde);
+      font-weight: bold;
+      margin-bottom: 25px;
+    }
+
+    .telefono h4 {
+      font-size: 1.35rem;
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+
+    .telefono p {
+      font-size: .75rem;
+      color: var(--gris);
+    }
+
+    .linea {
+      height: 7px;
+      border-radius: 10px;
+      background: #26352e;
+      margin-top: 14px;
+    }
+
+    .linea-corta {
+      width: 60%;
+    }
+
+    /* LIBROS */
+
+    .libros {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+    }
+
+    .libro {
+      background: linear-gradient(
+        145deg,
+        #151c19,
+        var(--tarjeta)
+      );
+      border: 1px solid var(--borde);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .portada {
+     aspect-ratio: 3 / 4;
+     overflow: hidden;
+     background: #111;
+    }
+
+ .portada img {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   display: block;
+ }
+
+
+    .libro-contenido {
+      padding: 20px;
+    }
+     
+  .libro-contenido h3 {
+     font-size: 1.05rem;
+     line-height: 1.35;
+     margin: 0 0 12px;
+     font-weight: 700;
+    }
+
+.libro-contenido p {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin: 0 0 20px;
+  opacity: 0.72;
+  font-weight: 400;
+  font-style: italic;
+  padding-left: 12px;
+  border-left: 2px solid currentColor;
+}
+
+    .libro h3 {
+      font-size: 1rem;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .libro .boton {
+      width: 100%;
+      min-height: 45px;
+      font-size: .9rem;
+    }
+
+   .btn-libros {
+     display: inline-block;
+     margin-top: 18px;
+     padding: 12px 22px;
+     color: #65A9D4;
+     border: 1px solid #65A9D4;
+     border-radius: 10px;
+     text-decoration: none;
+     font-weight: 600;
+     transition: all 0.3s ease;
+   }
+
+.btn-libros:hover {
+  background: #65A9D4;
+  color: #080b0a;
+}
+
+    /* CIERRE */
+
+    .cierre {
+      text-align: center;
+      padding: 110px 0 100px;
+      background:
+        linear-gradient(
+          180deg,
+          transparent,
+          rgba(84,227,154,.06)
+        );
+    }
+
+    .cierre h2 {
+      max-width: 750px;
+      margin: auto;
+    }
+
+    .verde {
+      color: var(--verde);
+    }
+
+    .cierre p {
+      color: var(--gris);
+      margin: 18px auto 30px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid var(--borde);
+      padding: 28px 0;
+      color: #737d78;
+      font-size: .82rem;
+      text-align: center;
+    }
+
+    /* CELULAR */
+
+    @media (max-width: 900px) {
+
+      .libros {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .experiencia {
+        grid-template-columns: 1fr;
+      }
+
+      .visual {
+        min-height: 300px;
+      }
+    }
+
+    @media (max-width: 520px) {
+
+      header {
+        min-height: 86vh;
+      }
+
+      section {
+        padding: 70px 0;
+      }
+
+      .texto-experiencia {
+        padding: 28px;
+      }
+
+      .libros {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .libro-contenido {
+        padding: 15px;
+      }
+
+      .libro h3 {
+        font-size: .9rem;
+      }
+
+      .portada {
+        font-size: .85rem;
+        padding: 14px;
+      }
+
+      .boton {
+        width: 100%;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="contenedor hero">
+<div class="logo">
+  <img
+    src="logo-transformate.png"
+    alt="Transformate — Hacia tu mejor versión">
+</div>
+
+<div class="marca">
+   TRANSFORMATE
+</div>
+
+    <h1>Empieza donde estás.</h1>
+
+   <p>
+      Conviértete en quien quieres ser.
+   </p>
+
+    <a
+      class="boton boton-principal"
+      href="#experiencia">
+      EMPEZAR A TRANSFORMARME
+    </a>
+
+    <span class="bajar">
+      Descubre tu próximo paso ↓
+    </span>
+
+  </div>
+
+</header>
+
+
+<main>
+
+<!-- EXPERIENCIA -->
+
+<section id="experiencia">
+
+  <div class="contenedor">
+
+    <div class="encabezado">
+
+      <div class="etiqueta">
+        EMPIEZA AQUÍ
+      </div>
+
+      <h2>
+        ¿Procrastinas y no consigues avanzar?
+      </h2>
+
+      <p>
+        No necesitas cambiarlo todo de golpe.
+        Empieza con una experiencia diseñada
+        para ayudarte a pasar de la intención a la acción.
+      </p>
+
+    </div>
+
+
+    <div class="experiencia">
+
+      <div class="tarjeta texto-experiencia">
+
+        <h3>
+          Cómo vencer la procrastinación
+          y lograr tus metas
+        </h3>
+
+        <p>
+          Una experiencia práctica de 21 días
+          para dejar de postergar y empezar a avanzar.
+        </p>
+
+        <ul class="puntos">
+
+          <li>
+            Acciones concretas para cada día
+          </li>
+
+          <li>
+            Herramientas para vencer la postergación
+          </li>
+
+          <li>
+            Un recorrido pensado para pasar a la acción
+          </li>
+
+        </ul>
+
+        <a
+          class="boton boton-principal"
+          href="https://antiprocrastina.vercel.app/">
+
+          EMPEZAR EXPERIENCIA
+
+        </a>
+
+       <a href="#mis-libros" class="btn-libros">
+          📚 EXPLORAR MIS LIBROS
+        </a>
+
+      </div>
+
+
+      <div class="visual">
+
+        <div class="telefono">
+
+          <div class="telefono-pequeno">
+            TRANSFORMATE · DÍA 1
+          </div>
+
+          <h4>
+            Deja de esperar
+            el momento perfecto.
+          </h4>
+
+          <p>
+            El cambio comienza
+            con una acción pequeña.
+          </p>
+
+          <div class="linea"></div>
+          <div class="linea linea-corta"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- LIBROS -->
+
+<section id="libros">
+
+  <div class="contenedor">
+
+    <div class="encabezado">
+
+      <div class="etiqueta">
+        LECTURAS PARA TRANSFORMARTE
+      </div>
+
+      <h2 id="mis-libros">
+        Explora nuestros libros
+      </h2>
+
+      <p>
+        Ideas para comprenderte mejor,
+        soltar lo que pesa y avanzar hacia
+        una vida más consciente.
+      </p>
+
+    </div>
+
+
+    <div class="libros">
+
+
+      <!-- LIBRO 1 -->
+
+      <article class="libro">
+
+        <div class="portada">
+          <img
+             src="portadas/procrastinacion.png"
+            alt="Cómo vencer la procrastinación y lograr tus metas">
+         </div>
+
+        <div class="libro-contenido">
+
+          <h3>
+            Cómo vencer la procrastinación
+            y lograr tus metas
+          </h3>
+           <p> ¿Sabes lo que quieres hacer, pero sigues dejándolo para después? </p> 
+           <p class="libro-para"> Para quienes quieren dejar de postergar y empezar a avanzar. </p>
+          <a
+            class="boton boton-secundario"
+            href="https://go.hotmart.com/D102707421X"
+            target="_blank"
+            rel="noopener">
+
+            DEJAR DE POSTERGAR
+
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- LIBRO 2 -->
+
+      <article class="libro">
+
+        <div class="portada">
+ 	 <img
+	    src="portadas/estres.png"
+ 	   alt="Estrés — Cómo liberarte de una lucha innecesaria">
+	</div>
+        <div class="libro-contenido">
+
+          <h3>
+            Estrés — Cómo liberarte
+            de una lucha innecesaria
+          </h3>
+             
+           <p> ¿Sientes que llevas demasiado tiempo cargando con cosas que te desgastan? </p> 
+           <p class="libro-para"> Para quienes quieren recuperar calma y dejar de luchar contra todo. </p>
+          <a
+            class="boton boton-secundario"
+            href="https://go.hotmart.com/W103080068I"
+            target="_blank"
+            rel="noopener">
+
+            LIBERARME DEL ESTRÉS
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- LIBRO 3 -->
+
+      <article class="libro">
+
+       <div class="portada">
+ 	 <img
+    	 src="portadas/hasta-encontrarme.png"
+    	 alt="Hasta Encontrarme">
+	</div>
+
+        <div class="libro-contenido">
+
+          <h3>
+            Hasta Encontrarme
+          </h3>
+           
+           <p> ¿Cuánto de lo que cargas hoy realmente necesitas seguir cargando? </p> 
+           <p class="libro-para"> Una invitación a soltar aquello que ya no necesitas llevar contigo. </p>
+          <a
+            class="boton boton-secundario"
+            href="https://go.hotmart.com/M103112051L"
+            target="_blank"
+            rel="noopener">
+
+              APRENDER A SOLTAR
+
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- LIBRO 4 -->
+
+      <article class="libro">
+
+        <div class="portada">
+         <img
+             src="portadas/gracia-de-soltar.png"
+               alt="La Gracia de Soltar">
+        </div>
+
+        <div class="libro-contenido">
+
+          <h3>
+            La Gracia de Soltar
+          </h3>
+
+           <p> ¿Alguna vez has sentido que estás viviendo, pero todavía no sabes quién eres realmente? </p> 
+           <p class="libro-para"> Un viaje hacia el encuentro contigo mismo. </p>
+
+          <a
+            class="boton boton-secundario"
+            href="https://go.hotmart.com/F103117535D"
+            target="_blank"
+            rel="noopener">
+
+            ENCONTRARME
+
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- LIBRO 5 -->
+
+      <article class="libro">
+
+        <div class="portada">
+  	<img
+    	  src="portadas/protocolo-del-asombro.png"
+    	  alt="El Protocolo del Asombro">
+	</div>
+
+        <div class="libro-contenido">
+
+          <h3>
+            El Protocolo del Asombro
+          </h3>
+
+            <p> ¿Y si aquello que crees conocer no fuera exactamente lo que parece? </p> 
+            <p class="libro-para"> Una novela para despertar la curiosidad y mirar la realidad con otros ojos. </p>
+          <a
+            class="boton boton-secundario"
+            href="https://go.hotmart.com/X102779012G"
+            target="_blank"
+            rel="noopener">
+
+            DESCUBRIR EL ASOMBRO
+
+          </a>
+
+        </div>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CIERRE -->
+
+<section class="cierre">
+
+  <div class="contenedor">
+
+    <div class="etiqueta">
+      TU PRÓXIMO PASO
+    </div>
+
+    <h2>
+
+      No tienes que cambiarlo todo hoy.
+
+      <br>
+
+      <span class="verde">
+        Solo tienes que empezar.
+      </span>
+
+    </h2>
+
+    <p>
+      Encuentra una herramienta, una idea
+      o una experiencia que te ayude
+      a dar ese primer paso.
+    </p>
+
+    <a
+      class="boton boton-principal"
+      href="#experiencia">
+
+      EMPEZAR AHORA
+
+    </a>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  © 2026 Transformate ·
+  Ideas para convertirte en la persona que quieres ser.
+
+</footer>
+
+
+</body>
+</html>
