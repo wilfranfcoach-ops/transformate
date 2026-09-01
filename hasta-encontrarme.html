@@ -1,1 +1,1168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Hasta Encontrarme | Transformate</title>
+
+  <meta name="description"
+        content="Una experiencia para comenzar a descubrir quién eres debajo de todas las capas.">
+
+  <style>
+
+    :root {
+      --fondo: #080b0f;
+      --fondo-2: #0d1218;
+      --tarjeta: #111820;
+      --texto: #f4f6f8;
+      --gris: #aab4bd;
+      --azul: #65A9D4;
+      --azul-hover: #78B8DF;
+      --borde: rgba(255,255,255,.09);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(101,169,212,.14),
+          transparent 38%
+        ),
+        var(--fondo);
+      color: var(--texto);
+      line-height: 1.65;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .contenedor {
+      width: min(1050px, 92%);
+      margin: auto;
+    }
+
+    section {
+      padding: 90px 0;
+    }
+
+    .etiqueta {
+      color: var(--azul);
+      font-size: .78rem;
+      font-weight: bold;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.1;
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-contenido {
+      width: 100%;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 35px;
+    }
+
+    .logo img {
+      width: 145px;
+      height: 145px;
+      object-fit: contain;
+    }
+
+    .portada-hero {
+      width: min(310px, 72vw);
+      margin: 0 auto 38px;
+      display: block;
+      border-radius: 8px;
+      box-shadow:
+        0 35px 80px rgba(0,0,0,.65),
+        0 0 50px rgba(101,169,212,.08);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      letter-spacing: -.045em;
+      margin-bottom: 12px;
+    }
+
+    .subtitulo {
+      color: var(--azul);
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+
+    .autor {
+      color: var(--gris);
+      font-size: .9rem;
+      margin-bottom: 42px;
+    }
+
+    .pregunta-hero {
+      max-width: 750px;
+      margin: auto;
+      font-size: clamp(1.35rem, 3.5vw, 2rem);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .bajar {
+      margin-top: 38px;
+      color: #75808a;
+      font-size: .85rem;
+    }
+
+    /* BOTONES */
+
+    .boton {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 52px;
+      padding: 0 28px;
+      border-radius: 999px;
+      font-weight: bold;
+      transition: .25s ease;
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    .boton-principal {
+      background: var(--azul);
+      color: #071018;
+    }
+
+    .boton-principal:hover {
+      transform: translateY(-2px);
+      background: var(--azul-hover);
+    }
+
+    .btn-libro {
+      display: flex;
+      width: fit-content;
+      margin: 18px auto 0;
+      padding: 10px 20px;
+      color: var(--azul);
+      border: 1px solid var(--azul);
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: .85rem;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: .3s ease;
+    }
+
+    .btn-libro:hover {
+      background: var(--azul);
+      color: #071018;
+    }
+
+    /* PREGUNTA */
+
+    .seccion-pregunta {
+      text-align: center;
+      background:
+        linear-gradient(
+          180deg,
+          transparent,
+          rgba(101,169,212,.035)
+        );
+    }
+
+    .seccion-pregunta h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .frase {
+      max-width: 680px;
+      margin: 25px auto 0;
+      color: var(--gris);
+      font-size: 1.1rem;
+    }
+
+    /* CAPAS */
+
+    .capas {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .capa {
+      background: linear-gradient(145deg,#151d25,var(--tarjeta));
+      border: 1px solid var(--borde);
+      border-radius: 18px;
+      padding: 24px;
+      transition: .25s ease;
+    }
+
+    .capa:hover {
+      transform: translateY(-3px);
+      border-color: rgba(101,169,212,.35);
+    }
+
+    .capa span {
+      display: block;
+      color: var(--azul);
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .capa p {
+      color: var(--gris);
+      font-size: .95rem;
+    }
+
+    .pregunta-capas {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .pregunta-capas h3 {
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 15px;
+      border: 1px solid var(--borde);
+      background: #0b1015;
+      color: var(--texto);
+      padding: 18px;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: rgba(101,169,212,.65);
+    }
+
+    .respuesta {
+      max-width: 700px;
+      margin: 18px auto 0;
+      color: var(--azul);
+      font-weight: bold;
+      opacity: 0;
+      transition: .5s ease;
+    }
+
+    .respuesta.mostrar {
+      opacity: 1;
+    }
+
+    /* HISTORIA */
+
+    .historia {
+      text-align: center;
+    }
+
+    .historia-intro {
+      max-width: 700px;
+      margin: 0 auto 45px;
+      color: var(--gris);
+      font-size: 1.05rem;
+    }
+
+    .historia-intro strong {
+      color: var(--texto);
+    }
+
+    /* LIBRO DIGITAL */
+
+    .libro-digital {
+      max-width: 780px;
+      margin: auto;
+    }
+
+    .pagina {
+      display: none;
+      background:
+        linear-gradient(145deg,#f2f0ea,#dcd9d0);
+      color: #202328;
+      border-radius: 8px;
+      padding: clamp(28px, 6vw, 58px);
+      min-height: 520px;
+      box-shadow: 0 30px 70px rgba(0,0,0,.45);
+      text-align: left;
+    }
+
+    .pagina.activa {
+      display: block;
+      animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .pagina-numero {
+      text-align: right;
+      color: #777;
+      font-size: .8rem;
+      margin-bottom: 22px;
+    }
+
+    .pagina h3 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin-bottom: 22px;
+    }
+
+    .pagina h4 {
+      font-size: 1.15rem;
+      margin: 24px 0 12px;
+    }
+
+    .pagina p {
+      margin-bottom: 16px;
+      font-size: .98rem;
+    }
+
+    .pagina .destacado {
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    .pagina .dialogo {
+      font-style: italic;
+      margin: 20px 0;
+    }
+
+    .controles {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 25px;
+    }
+
+    .control {
+      border: 1px solid rgba(101,169,212,.5);
+      background: rgba(101,169,212,.06);
+      color: var(--azul);
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .control:hover {
+      background: rgba(101,169,212,.12);
+    }
+
+    /* PAUSA */
+
+    .pausa {
+      text-align: center;
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(101,169,212,.08),
+          transparent 55%
+        );
+    }
+
+    .pausa h2 {
+      max-width: 800px;
+      margin: auto;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+    }
+
+    .pausa-frase {
+      max-width: 680px;
+      margin: 25px auto;
+      color: var(--gris);
+      font-size: 1.1rem;
+    }
+
+    .gran-frase {
+      max-width: 750px;
+      margin: 45px auto 0;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: bold;
+      color: var(--azul);
+    }
+
+    /* CAPITULOS */
+
+    .capitulos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 40px;
+    }
+
+    .capitulo {
+      border: 1px solid var(--borde);
+      background: var(--tarjeta);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .capitulo strong {
+      color: var(--azul);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .capitulo p {
+      color: var(--gris);
+      font-size: .9rem;
+    }
+
+    /* CTA */
+
+    .cta {
+      text-align: center;
+      padding: 110px 0;
+      background:
+        linear-gradient(
+          180deg,
+          transparent,
+          rgba(101,169,212,.07)
+        );
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      max-width: 750px;
+      margin: auto;
+    }
+
+    .cta p {
+      color: var(--gris);
+      max-width: 650px;
+      margin: 22px auto;
+      font-size: 1.05rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--borde);
+      padding: 28px 0;
+      color: #737d86;
+      font-size: .82rem;
+      text-align: center;
+    }
+
+    /* CELULAR */
+
+    @media (max-width: 650px) {
+
+      section {
+        padding: 70px 0;
+      }
+
+      .capas,
+      .capitulos {
+        grid-template-columns: 1fr;
+      }
+
+      .pagina {
+        min-height: auto;
+        padding: 28px 22px;
+      }
+
+      .boton {
+        width: 100%;
+      }
+
+      .controles {
+        flex-wrap: wrap;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- HERO -->
+
+<header class="hero">
+
+  <div class="contenedor hero-contenido">
+
+    <div class="logo">
+      <img
+        src="logo-transformate.png"
+        alt="Transformate">
+    </div>
+
+    <img
+      class="portada-hero"
+      src="portadas/hasta-encontrarme.png"
+      alt="Hasta Encontrarme">
+
+    <div class="etiqueta">
+      TRANSFORMATE PRESENTA
+    </div>
+
+    <h1>HASTA ENCONTRARME</h1>
+
+    <div class="subtitulo">
+      Entre lo que creo ser y lo que soy
+    </div>
+
+    <div class="autor">
+      Inspirado por Wilfran Fonnegra
+    </div>
+
+    <div class="pregunta-hero">
+      ¿En qué momento me perdí de mí?
+    </div>
+
+    <a
+      class="boton boton-principal"
+      href="#pregunta">
+
+      COMENZAR EL VIAJE ↓
+
+    </a>
+
+    <div class="bajar">
+      Una pregunta puede cambiarlo todo.
+    </div>
+
+  </div>
+
+</header>
+
+
+<main>
+
+<!-- PREGUNTA -->
+
+<section class="seccion-pregunta" id="pregunta">
+
+  <div class="contenedor">
+
+    <div class="etiqueta">
+      ANTES DE SEGUIR
+    </div>
+
+    <h2>
+      ¿En qué momento me perdí de mí?
+    </h2>
+
+    <p class="frase">
+      Quizás nunca hubo un momento exacto.
+      Quizás simplemente fuiste acumulando capas:
+      expectativas, roles, heridas, logros,
+      opiniones y formas de comportarte.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- CAPAS -->
+
+<section>
+
+  <div class="contenedor">
+
+    <div class="encabezado">
+
+      <div class="etiqueta">
+        MIRA HACIA ADENTRO
+      </div>
+
+      <h2>
+        Algunas de las capas que aprendemos a llevar
+      </h2>
+
+    </div>
+
+    <div class="capas">
+
+      <div class="capa">
+        <span>EL QUE DEBE PODER</span>
+        <p>
+          “Tengo que poder con todo.”
+        </p>
+      </div>
+
+      <div class="capa">
+        <span>EL QUE CUMPLE</span>
+        <p>
+          “No puedo decepcionar a nadie.”
+        </p>
+      </div>
+
+      <div class="capa">
+        <span>EL QUE DEBE SER ALGUIEN</span>
+        <p>
+          “Tengo que demostrar que valgo.”
+        </p>
+      </div>
+
+      <div class="capa">
+        <span>EL QUE NECESITA ENCAJAR</span>
+        <p>
+          “Tengo que ser como esperan que sea.”
+        </p>
+      </div>
+
+    </div>
+
+    <div class="pregunta-capas">
+
+      <h3>
+        ¿Cuál de estas capas reconoces en ti?
+      </h3>
+
+      <textarea
+        id="respuestaCapas"
+        placeholder="Escribe aquí lo primero que te venga a la mente..."></textarea>
+
+      <button
+        class="boton boton-principal"
+        onclick="mostrarRespuesta()">
+
+        MIRAR ESTA CAPA
+
+      </button>
+
+      <div
+        class="respuesta"
+        id="mensajeRespuesta">
+
+        No tienes que quitarla ahora.
+        Primero basta con reconocer que existe.
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- HISTORIA -->
+
+<section class="historia">
+
+  <div class="contenedor">
+
+    <div class="etiqueta">
+      AHORA ENTRA EN LA HISTORIA
+    </div>
+
+    <h2>
+      Conoce a Daniel.
+    </h2>
+
+    <p class="historia-intro">
+      Daniel no está viviendo una tragedia.
+      Su vida parece estar bien.
+      <strong>Y justamente por eso no entiende qué le pasa.</strong>
+    </p>
+
+    <div class="libro-digital">
+
+      <!-- PAGINA 6 -->
+
+      <article class="pagina activa">
+
+        <div class="pagina-numero">
+          CAPÍTULO 1 · PÁGINA 1
+        </div>
+
+        <h3>
+          El Descubrimiento de las Capas
+        </h3>
+
+        <p>
+          Al día siguiente, Daniel despertó con la misma rutina de siempre:
+          alarma en tres repeticiones, celular en la mano antes de levantarse,
+          y una sensación de cansancio que no coincidía con las horas de sueño.
+        </p>
+
+        <p>
+          Caminó hacia el baño, se miró al espejo y se quedó observando
+          su reflejo por unos segundos más de lo habitual.
+        </p>
+
+        <p>
+          No era una mirada de admiración, ni de preocupación.
+        </p>
+
+        <p class="destacado">
+          Era una mirada vacía, como quien observa un objeto conocido,
+          pero sin sentirlo propio.
+        </p>
+
+        <p class="dialogo">
+          —Estoy aquí, pero no sé si soy yo —susurró.
+        </p>
+
+        <p>
+          Se duchó, se vistió, tomó café rápido y salió hacia la universidad.
+        </p>
+
+      </article>
+
+
+      <!-- PAGINA 7 -->
+
+      <article class="pagina">
+
+        <div class="pagina-numero">
+          CAPÍTULO 1 · PÁGINA 2
+        </div>
+
+        <p>
+          En clase, el profesor de filosofía habló sobre la identidad.
+          Preguntó algo simple:
+        </p>
+
+        <p class="dialogo">
+          —¿Quién eres?
+        </p>
+
+        <p>
+          Varios levantaron la mano con respuestas automáticas:
+        </p>
+
+        <p>
+          —Soy estudiante.<br>
+          —Soy deportista.<br>
+          —Soy el mayor de tres hermanos.<br>
+          —Soy una persona feliz.<br>
+          —Soy creyente.
+        </p>
+
+        <p>
+          El profesor asintió, hasta que dijo:
+        </p>
+
+        <p class="dialogo">
+          —No estoy preguntando qué haces, con quién vives,
+          qué sientes o qué crees. Estoy preguntando
+          <strong>quién eres cuando nada de eso existe.</strong>
+        </p>
+
+        <p>
+          Daniel sintió un pequeño golpe interno.
+          No dolor físico… una punzada en la conciencia.
+        </p>
+
+        <p class="destacado">
+          “No sabrías qué responder.”
+        </p>
+
+      </article>
+
+
+      <!-- PAGINA 8 -->
+
+      <article class="pagina">
+
+        <div class="pagina-numero">
+          CAPÍTULO 1 · PÁGINA 3
+        </div>
+
+        <p>
+          Durante el descanso, Daniel decidió sentarse solo en el parque
+          de la universidad.
+        </p>
+
+        <p>
+          Tomó su libreta y escribió:
+        </p>
+
+        <p class="dialogo">
+          “Tengo emociones, pero no soy mis emociones.”
+        </p>
+
+        <p class="dialogo">
+          “Tengo pensamientos, pero no soy mis pensamientos.”
+        </p>
+
+        <p class="dialogo">
+          “Tengo gente, pero no soy mis relaciones.”
+        </p>
+
+        <p class="dialogo">
+          “Entonces… ¿qué soy debajo de todo eso?”
+        </p>
+
+        <p>
+          Se quedó mirando la página.
+          Las palabras parecían no venir de su mente,
+          sino de un lugar más profundo.
+        </p>
+
+        <p class="destacado">
+          “Quizás estoy cubierto.”
+        </p>
+
+        <p>
+          En ese momento, una voz suave —no externa, sino interna—
+          apareció con claridad:
+        </p>
+
+        <p class="destacado">
+          “No estás roto. Estás vestido.”
+        </p>
+
+      </article>
+
+
+      <!-- PAGINA 8 FINAL -->
+
+      <article class="pagina">
+
+        <div class="pagina-numero">
+          CAPÍTULO 1 · FINAL
+        </div>
+
+        <p>
+          Daniel sintió un escalofrío ligero, no de miedo,
+          sino de reconocimiento.
+        </p>
+
+        <p>
+          Como si hubiese escuchado algo que siempre había sabido,
+          pero nunca había querido mirar.
+        </p>
+
+        <p class="dialogo">
+          —¿Qué significa eso… “estar vestido”?
+        </p>
+
+        <p>
+          No hubo respuesta audible, pero sí una certeza íntima:
+        </p>
+
+        <p class="destacado">
+          No podía ignorarlo más. Algo había empezado.
+        </p>
+
+        <p>
+          Mientras caminaba de regreso al aula, vio reflejada
+          su silueta en una puerta de vidrio.
+        </p>
+
+        <p>
+          Por primera vez, tuvo la sensación de que cargaba algo
+          encima de él, no en su cuerpo, sino en su interior.
+        </p>
+
+        <p class="destacado">
+          Lo único que no sabía todavía era cómo quitarlo
+          ni cuántas capas estaban ocultando lo que realmente era.
+        </p>
+
+        <p class="destacado">
+          Cuando aparece la pregunta correcta,
+          el viaje ya comenzó.
+        </p>
+
+      </article>
+
+    </div>
+
+
+    <div class="controles">
+
+      <button
+        class="control"
+        onclick="paginaAnterior()">
+
+        ← ANTERIOR
+
+      </button>
+
+      <button
+        class="control"
+        onclick="paginaSiguiente()">
+
+        SIGUIENTE →
+
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- PAUSA -->
+
+<section class="pausa">
+
+  <div class="contenedor">
+
+    <div class="etiqueta">
+      DETENTE UN MOMENTO
+    </div>
+
+    <h2>
+      ¿Y si tú también estás cubierto?
+    </h2>
+
+    <p class="pausa-frase">
+      Daniel acaba de descubrir que quizá no está roto.
+      Quizás simplemente está vestido de demasiadas cosas.
+    </p>
+
+    <div class="gran-frase">
+      ¿Cuántas capas llevas tú?
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CAPITULOS -->
+
+<section>
+
+  <div class="contenedor">
+
+    <div class="encabezado">
+
+      <div class="etiqueta">
+        EL VIAJE CONTINÚA
+      </div>
+
+      <h2>
+        Hasta Encontrarme
+      </h2>
+
+      <p>
+        El primer capítulo apenas abre la puerta.
+        El resto del viaje llevará a Daniel
+        mucho más adentro.
+      </p>
+
+    </div>
+
+    <div class="capitulos">
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 1</strong>
+        <p>El descubrimiento de las capas.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 2</strong>
+        <p>El mapa hacia el Ser.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 3</strong>
+        <p>Encuentro con la primera capa: la emoción.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 4</strong>
+        <p>La ciudad de los pensamientos acumulados.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 5</strong>
+        <p>El templo del ego exitoso.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 6</strong>
+        <p>La isla de las máscaras sociales.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 7</strong>
+        <p>El bosque de las heridas antiguas.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 8</strong>
+        <p>Encuentro con el guía silencioso.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 9</strong>
+        <p>La sala del despojo.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>CAPÍTULO 10</strong>
+        <p>El regreso a la esencia.</p>
+      </div>
+
+      <div class="capitulo">
+        <strong>EPÍLOGO</strong>
+        <p>Vivir sin peso.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CTA -->
+
+<section class="cta">
+
+  <div class="contenedor">
+
+    <div class="etiqueta">
+      EL VIAJE APENAS COMIENZA
+    </div>
+
+    <h2>
+      ¿Estás listo para encontrarte?
+    </h2>
+
+    <p>
+      Lo que acabas de leer es apenas el comienzo.
+      La historia de Daniel continúa,
+      y quizás algunas de sus preguntas
+      también sean las tuyas.
+    </p>
+
+    <a
+      class="boton boton-principal"
+      href="https://go.hotmart.com/M103112051L"
+      target="_blank"
+      rel="noopener">
+
+      QUIERO SEGUIR EL VIAJE →
+
+    </a>
+
+    <a
+      class="btn-libro"
+      href="https://go.hotmart.com/M103112051L"
+      target="_blank"
+      rel="noopener">
+
+      QUIERO EL LIBRO →
+
+    </a>
+
+  </div>
+
+</section>
+
+
+</main>
+
+
+<footer>
+
+  © 2026 Transformate ·
+  Ideas para convertirte en la persona que quieres ser.
+
+</footer>
+
+
+<script>
+
+  let paginaActual = 0;
+
+  const paginas = document.querySelectorAll(".pagina");
+
+  function mostrarPagina(numero) {
+
+    paginas.forEach((pagina, indice) => {
+      pagina.classList.toggle(
+        "activa",
+        indice === numero
+      );
+    });
+
+  }
+
+  function paginaSiguiente() {
+
+    if (paginaActual < paginas.length - 1) {
+      paginaActual++;
+      mostrarPagina(paginaActual);
+    } else {
+      document.querySelector(".pausa").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+
+  }
+
+  function paginaAnterior() {
+
+    if (paginaActual > 0) {
+      paginaActual--;
+      mostrarPagina(paginaActual);
+    }
+
+  }
+
+  function mostrarRespuesta() {
+
+    const campo = document.getElementById("respuestaCapas");
+    const mensaje = document.getElementById("mensajeRespuesta");
+
+    if (campo.value.trim() !== "") {
+      mensaje.classList.add("mostrar");
+    } else {
+      campo.focus();
+    }
+
+  }
+
+</script>
+
+</body>
+</html>
