@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Estrés | Transformate</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      background:#07111f;
+      color:#ffffff;
+      line-height:1.7;
+      overflow-x:hidden;
+    }
+
+    .contenedor{
+      width:min(1100px, 90%);
+      margin:auto;
+    }
+
+    .seccion{
+      padding:90px 0;
+    }
+
+    .centrado{
+      text-align:center;
+    }
+
+    .azul{
+      color:#4da6ff;
+    }
+
+    .suave{
+      color:#b9c6d4;
+    }
+
+    .pequeno{
+      font-size:.9rem;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:#74b9ff;
+    }
+
+    h1{
+      font-size:clamp(3.5rem,9vw,7rem);
+      line-height:.95;
+      letter-spacing:-3px;
+    }
+
+    h2{
+      font-size:clamp(2rem,5vw,3.5rem);
+      line-height:1.15;
+      margin-bottom:25px;
+    }
+
+    h3{
+      font-size:1.4rem;
+      margin-bottom:15px;
+    }
+
+    p{
+      margin-bottom:18px;
+    }
+
+    .boton{
+      display:inline-block;
+      margin-top:28px;
+      padding:16px 30px;
+      background:#1677ff;
+      color:white;
+      text-decoration:none;
+      border-radius:50px;
+      font-weight:bold;
+      letter-spacing:.5px;
+      border:none;
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    .boton:hover{
+      transform:translateY(-3px);
+      background:#3389ff;
+    }
+
+    /* HERO */
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      background:
+        radial-gradient(circle at 25% 50%, rgba(41,113,190,.22), transparent 38%),
+        linear-gradient(135deg,#030812,#081827 60%,#050b13);
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:.85fr 1.15fr;
+      gap:70px;
+      align-items:center;
+    }
+
+    .portada{
+      width:min(360px,100%);
+      margin:auto;
+      display:block;
+      border-radius:8px;
+      box-shadow:
+        0 25px 70px rgba(0,0,0,.65),
+        0 0 45px rgba(30,122,255,.14);
+    }
+
+    .logo{
+      width:150px;
+      margin-bottom:35px;
+      opacity:.95;
+    }
+
+    .subtitulo{
+      font-size:1.25rem;
+      color:#b6c7d9;
+      margin:18px 0 35px;
+    }
+
+    .pregunta{
+      font-size:clamp(1.4rem,3vw,2.15rem);
+      line-height:1.35;
+      font-weight:600;
+      margin:30px 0;
+    }
+
+    /* HECHO INTERPRETACION */
+
+    .experiencia{
+      background:#0b1725;
+    }
+
+    .situacion{
+      max-width:760px;
+      margin:45px auto;
+      padding:35px;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:20px;
+      background:rgba(255,255,255,.035);
+    }
+
+    .hecho{
+      font-size:1.6rem;
+      font-weight:bold;
+      color:white;
+      margin:15px 0 30px;
+    }
+
+    .pensamientos{
+      display:grid;
+      gap:12px;
+      margin:25px 0;
+    }
+
+    .pensamiento{
+      padding:14px 18px;
+      background:#101f30;
+      border-left:3px solid #4da6ff;
+      border-radius:8px;
+    }
+
+    .formula{
+      margin:55px 0 15px;
+      font-size:clamp(2.3rem,7vw,5rem);
+      font-weight:900;
+      letter-spacing:-2px;
+      color:#62b0ff;
+    }
+
+    /* EJERCICIO */
+
+    .ejercicio{
+      background:#06101b;
+    }
+
+    .caja-ejercicio{
+      max-width:760px;
+      margin:35px auto;
+      background:#0d1d2d;
+      border-radius:20px;
+      padding:35px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    textarea{
+      width:100%;
+      min-height:120px;
+      border:none;
+      outline:none;
+      resize:vertical;
+      background:#07131f;
+      color:white;
+      padding:18px;
+      border-radius:12px;
+      font-size:1rem;
+      margin:10px 0 25px;
+    }
+
+    /* LECTURA */
+
+    .lectura{
+      background:#e9e2d6;
+      color:#202020;
+    }
+
+    .entrada-libro{
+      text-align:center;
+      color:#506070;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      margin-bottom:35px;
+    }
+
+    .pagina-libro{
+      max-width:760px;
+      margin:0 auto;
+      padding:60px 65px;
+      background:#fffdf8;
+      box-shadow:0 20px 70px rgba(0,0,0,.25);
+      min-height:680px;
+      border-radius:3px;
+      display:none;
+    }
+
+    .pagina-libro.activa{
+      display:block;
+    }
+
+    .pagina-libro h2,
+    .pagina-libro h3{
+      color:#151515;
+    }
+
+    .pagina-libro p{
+      color:#333;
+      margin-bottom:20px;
+    }
+
+    .pagina-libro ul{
+      margin:20px 0 20px 25px;
+    }
+
+    .pagina-numero{
+      margin-top:40px;
+      text-align:center;
+      color:#777;
+    }
+
+    .navegacion{
+      max-width:760px;
+      margin:30px auto 0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#27384a;
+    }
+
+    .navegacion button{
+      border:none;
+      background:#10243a;
+      color:white;
+      padding:13px 22px;
+      border-radius:30px;
+      cursor:pointer;
+    }
+
+    /* PAUSA */
+
+    .pausa{
+      min-height:80vh;
+      display:flex;
+      align-items:center;
+      background:
+        radial-gradient(circle,#102a44,#050c15 65%);
+    }
+
+    .pregunta-grande{
+      max-width:850px;
+      margin:30px auto;
+      font-size:clamp(1.8rem,5vw,3.3rem);
+      line-height:1.3;
+      font-weight:700;
+    }
+
+    /* IDENTIDADES */
+
+    .identidades{
+      background:#091522;
+    }
+
+    .grid-identidades{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+      margin-top:45px;
+    }
+
+    .tarjeta{
+      padding:30px 22px;
+      background:#102131;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    .tarjeta:hover,
+    .tarjeta.seleccionada{
+      transform:translateY(-6px);
+      border-color:#4da6ff;
+      background:#132b43;
+    }
+
+    #respuestaIdentidad{
+      max-width:700px;
+      margin:35px auto 0;
+      min-height:80px;
+      color:#d5e3f1;
+      font-size:1.15rem;
+    }
+
+    /* CAPITULOS */
+
+    .capitulos{
+      background:#eef3f8;
+      color:#152130;
+    }
+
+    .lista-capitulos{
+      max-width:850px;
+      margin:45px auto 0;
+    }
+
+    .capitulo{
+      display:grid;
+      grid-template-columns:75px 1fr;
+      gap:20px;
+      padding:25px 0;
+      border-bottom:1px solid #cdd8e2;
+    }
+
+    .numero{
+      font-size:1.4rem;
+      font-weight:bold;
+      color:#1677ff;
+    }
+
+    .capitulo strong{
+      display:block;
+      font-size:1.2rem;
+      margin-bottom:5px;
+    }
+
+    /* CTA */
+
+    .cta{
+      min-height:85vh;
+      display:flex;
+      align-items:center;
+      background:#030911;
+    }
+
+    .cta h2{
+      font-size:clamp(2.6rem,7vw,5rem);
+      max-width:900px;
+      margin:auto;
+    }
+
+    /* CIERRE */
+
+    .cierre{
+      background:#071421;
+      min-height:85vh;
+      display:flex;
+      align-items:center;
+    }
+
+    .frases-finales{
+      font-size:clamp(1.5rem,4vw,2.6rem);
+      line-height:1.7;
+      font-weight:700;
+      margin-bottom:45px;
+    }
+
+    footer{
+      padding:25px;
+      background:#02070c;
+      text-align:center;
+      color:#728297;
+      font-size:.85rem;
+    }
+
+    @media(max-width:800px){
+
+      .hero{
+        padding:70px 0;
+      }
+
+      .hero-grid{
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+
+      .portada{
+        max-width:270px;
+      }
+
+      .logo{
+        width:135px;
+      }
+
+      .grid-identidades{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .pagina-libro{
+        padding:40px 27px;
+        min-height:auto;
+      }
+
+      .seccion{
+        padding:70px 0;
+      }
+    }
+
+    @media(max-width:500px){
+
+      .grid-identidades{
+        grid-template-columns:1fr;
+      }
+
+      .capitulo{
+        grid-template-columns:50px 1fr;
+      }
+
+      .navegacion{
+        gap:10px;
+      }
+
+      .navegacion button{
+        padding:11px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="contenedor hero-grid">
+
+    <div>
+      <img
+        src="portadas/estres.png"
+        alt="Portada del libro Estrés"
+        class="portada"
+      >
+    </div>
+
+    <div>
+
+      <img
+        src="logo-transformate.png"
+        alt="Transformate"
+        class="logo"
+      >
+
+      <div class="pequeno">Una experiencia Transformate</div>
+
+      <h1>ESTRÉS</h1>
+
+      <p class="subtitulo">
+        Cómo liberarte de una lucha innecesaria
+      </p>
+
+      <div class="pregunta">
+        ¿Y si el problema no fuera todo lo que tienes que hacer…
+        sino todo lo que estás luchando internamente para sostener?
+      </div>
+
+      <p class="suave">
+        Vivimos intentando controlar, cumplir, demostrar, anticipar y sostener
+        una imagen de nosotros mismos.
+      </p>
+
+      <p class="suave">
+        Y muchas veces confundimos esa lucha con la vida.
+      </p>
+
+      <a href="#experiencia" class="boton">
+        DESCUBRIR LA EXPERIENCIA ↓
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- EXPERIENCIA -->
+
+<section class="seccion experiencia centrado" id="experiencia">
+  <div class="contenedor">
+
+    <div class="pequeno">La vida sucede</div>
+
+    <h2>No respondió tu mensaje.</h2>
+
+    <div class="situacion">
+
+      <p class="suave">Pero tu mente puede agregar:</p>
+
+      <div class="pensamientos">
+
+        <div class="pensamiento">
+          “Está molesto conmigo.”
+        </div>
+
+        <div class="pensamiento">
+          “Hice algo mal.”
+        </div>
+
+        <div class="pensamiento">
+          “Ya no le importo.”
+        </div>
+
+        <div class="pensamiento">
+          “Seguro pasó algo.”
+        </div>
+
+      </div>
+
+      <p class="pequeno">¿Qué ocurrió realmente?</p>
+
+      <div class="hecho">
+        No respondió el mensaje.
+      </div>
+
+    </div>
+
+    <div class="formula">
+      HECHO ≠ INTERPRETACIÓN
+    </div>
+
+    <p class="pregunta-grande" style="font-size:1.7rem;">
+      Tal vez una parte de tu estrés no está en lo que ocurre…
+      <span class="azul">
+        sino en la historia que construyes alrededor de lo que ocurre.
+      </span>
+    </p>
+
+  </div>
+</section>
+
+
+<!-- EJERCICIO PERSONAL -->
+
+<section class="seccion ejercicio">
+  <div class="contenedor centrado">
+
+    <div class="pequeno">Pruébalo contigo</div>
+
+    <h2>Piensa en algo que hoy te esté preocupando.</h2>
+
+    <div class="caja-ejercicio">
+
+      <label>
+        <strong>¿Qué ocurrió realmente?</strong>
+      </label>
+
+      <textarea
+        placeholder="Describe únicamente el hecho, sin interpretarlo..."
+      ></textarea>
+
+      <label>
+        <strong>
+          ¿Qué historia está construyendo tu mente alrededor de eso?
+        </strong>
+      </label>
+
+      <textarea
+        placeholder="Escribe aquí tus pensamientos, temores o interpretaciones..."
+      ></textarea>
+
+      <p class="suave">
+        Acabas de separar el hecho de la interpretación.
+      </p>
+
+      <p>
+        Parece sencillo.
+        <strong>
+          Pero hacerlo puede cambiar la manera en que observas muchas situaciones.
+        </strong>
+      </p>
+
+    </div>
+
+    <a href="#libro" class="boton">
+      ENTRAR AL LIBRO ↓
+    </a>
+
+  </div>
+</section>
+
+
+<!-- LIBRO -->
+
+<section class="seccion lectura" id="libro">
+
+  <div class="contenedor">
+
+    <div class="entrada-libro">
+      Una muestra real del libro
+    </div>
+
+
+    <!-- PAGINA 8 -->
+
+    <article class="pagina-libro activa">
+
+      <h2>CAPÍTULO 1 — La Lucha que No Existe</h2>
+
+      <h3>1.1 Cuando el ego inventa amenazas para sentirse vivo</h3>
+
+      <p>
+        La mayoría de las personas cree que su estrés proviene de problemas
+        reales: situaciones difíciles, responsabilidades acumuladas, falta de
+        tiempo, exigencias externas… Y sí, estas circunstancias influyen, pero
+        no son la raíz verdadera.
+      </p>
+
+      <p>
+        Lo que realmente nos estresa no es la vida, sino el modo en que la
+        interpretamos. Es decir,
+        <strong>
+          la historia interna que el ego construye sobre lo que ocurre.
+        </strong>
+      </p>
+
+      <p>
+        El ego, tal como lo abordaremos en este libro, no es un enemigo, pero
+        sí es un narrador incansable. Es esa parte de la mente que
+        constantemente dice:
+      </p>
+
+      <p>
+        <em>
+          “Esto debería ser diferente… Esto no puede pasar así…
+          No es suficiente… No soy suficiente… ¿Qué pensarán de mí?”
+        </em>
+      </p>
+
+      <p>
+        Ese narrador no busca paz; busca relevancia. Y, para sentirse vivo,
+        necesita problemas que resolver, batallas que pelear y amenazas que
+        vigilar.
+      </p>
+
+      <p>
+        Por eso, incluso cuando objetivamente “todo está bien”, puedes sentirte
+        tenso.
+      </p>
+
+      <p>
+        No es porque la vida sea dura.
+        <strong>Es porque el ego necesita algo contra qué luchar.</strong>
+      </p>
+
+      <h3>1.2 El ego como creador de conflictos invisibles</h3>
+
+      <p>
+        El ego vive de la idea de “yo”: lo que creo que soy, lo que creo que
+        debo ser, lo que quiero proteger, lo que temo perder.
+      </p>
+
+      <ul>
+        <li><strong>La víctima</strong> cuando se siente atacado.</li>
+        <li><strong>El héroe</strong> cuando necesita demostrar.</li>
+        <li><strong>El fuerte</strong> cuando le asusta mostrarse vulnerable.</li>
+        <li><strong>El responsable</strong> cuando quiere sentirse indispensable.</li>
+      </ul>
+
+      <div class="pagina-numero">1 / 3</div>
+
+    </article>
+
+
+    <!-- PAGINA 9 -->
+
+    <article class="pagina-libro">
+
+      <p>
+        Y así aparecen tensiones que no corresponden a la realidad, sino a
+        interpretaciones mentales:
+      </p>
+
+      <ul>
+        <li>“Me están juzgando”.</li>
+        <li>“Tengo que hacerlo perfecto”.</li>
+        <li>“Si fallo, perderé valor”.</li>
+        <li>“Debo mostrar que puedo con todo”.</li>
+        <li>“Tengo que estar a la altura”.</li>
+      </ul>
+
+      <p>
+        La mayoría de esas amenazas son imaginarias, pero el cuerpo las siente
+        como reales.
+      </p>
+
+      <h3>1.3 La diferencia entre lo que pasa y lo que interpretas</h3>
+
+      <p><strong>La vida sucede.</strong></p>
+
+      <p><strong>Pero tu mente interpreta.</strong></p>
+
+      <p>
+        Entre el hecho y tu estrés hay una distancia que casi nunca
+        reconocemos.
+      </p>
+
+      <p>
+        <strong>Hecho:</strong> No te respondieron un mensaje.<br>
+        <strong>Interpretación:</strong>
+        “Me están ignorando”, “no les importo”, “debe estar molesto”.
+      </p>
+
+      <p>
+        <strong>Hecho:</strong> Hay tráfico.<br>
+        <strong>Interpretación:</strong>
+        “Siempre pasa lo mismo”, “voy a llegar tarde”, “esto es terrible”.
+      </p>
+
+      <p>
+        <strong>Hecho:</strong> Alguien dice algo seco.<br>
+        <strong>Interpretación:</strong>
+        “Está conmigo”, “le caigo mal”, “soy el problema”.
+      </p>
+
+      <p>
+        <strong>
+          La interpretación es lo que activa el estrés, no el hecho.
+        </strong>
+      </p>
+
+      <div class="pagina-numero">2 / 3</div>
+
+    </article>
+
+
+    <!-- PAGINA 10 -->
+
+    <article class="pagina-libro">
+
+      <p>
+        El ego exagera, dramatiza, se adelanta al desastre, se toma todo
+        personal e interpreta desde el miedo.
+      </p>
+
+      <p>
+        No lo hace para dañarte.
+      </p>
+
+      <p>
+        Lo hace porque cree que protegerte es su trabajo.
+      </p>
+
+      <p>
+        Pero mientras intenta protegerte de amenazas imaginarias, crea una
+        tensión innecesaria que te desgasta emocionalmente.
+      </p>
+
+      <p>
+        Ese desgaste es lo que llamamos estrés.
+      </p>
+
+      <p>
+        El ego confunde lucha con seguridad.
+      </p>
+
+      <p>
+        Pero vivir en pelea interna sólo genera cansancio, ansiedad y sensación
+        de carga.
+      </p>
+
+      <p>
+        La buena noticia es esta:
+      </p>
+
+      <h2 style="font-size:2rem;">
+        Cuando reconoces que la lucha es inventada,
+        el estrés pierde su poder.
+      </h2>
+
+      <h3>
+        1.4 Liberarte de la lucha no es renunciar a la vida:
+        es renunciar a la interpretación inútil
+      </h3>
+
+      <p>
+        Soltar la lucha inventada no significa volverte pasivo, ni dejar de
+        hacer, ni ignorar tus responsabilidades.
+      </p>
+
+      <p>
+        Significa
+        <strong>
+          relacionarte con la vida sin resistirla internamente.
+        </strong>
+      </p>
+
+      <p>
+        La resistencia interna es la que genera estrés.
+      </p>
+
+      <p>
+        <strong>
+          La aceptación consciente es la que te devuelve calma.
+        </strong>
+      </p>
+
+      <div class="pagina-numero">3 / 3</div>
+
+    </article>
+
+
+    <div class="navegacion">
+
+      <button onclick="paginaAnterior()">
+        ← Anterior
+      </button>
+
+      <span id="indicadorPagina">
+        Página 1 de 3
+      </span>
+
+      <button onclick="paginaSiguiente()">
+        Siguiente →
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- PAUSA -->
+
+<section class="seccion pausa centrado">
+  <div class="contenedor">
+
+    <div class="pequeno">Detente un momento</div>
+
+    <div class="pregunta-grande">
+      ¿Cuánto de tu estrés pertenece realmente a lo que está ocurriendo…
+      <span class="azul">
+        y cuánto pertenece a la historia que estás construyendo sobre ello?
+      </span>
+    </div>
+
+    <p class="suave">
+      Quizás acabas de descubrir una pregunta que puede cambiar
+      la manera en que vives muchas situaciones.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- FOTO DEL EGO -->
+
+<section class="seccion ejercicio">
+  <div class="contenedor centrado">
+
+    <div class="pequeno">Ejercicio real del capítulo 1</div>
+
+    <h2>La Foto del Ego</h2>
+
+    <div class="caja-ejercicio">
+
+      <h3>
+        ¿Qué versión de mí intento sostener todos los días?
+      </h3>
+
+      <p class="suave">
+        Tal vez el fuerte. El que siempre puede. El que cumple.
+        El perfecto. El indispensable.
+      </p>
+
+      <textarea
+        placeholder="Escribe aquí la versión de ti que sientes que debes sostener..."
+      ></textarea>
+
+      <h3>
+        ¿Qué tanto estrés me genera sostener esa imagen?
+      </h3>
+
+      <textarea
+        placeholder="Observa lo que aparece, sin juzgarlo..."
+      ></textarea>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- IDENTIDADES -->
+
+<section class="seccion identidades centrado">
+
+  <div class="contenedor">
+
+    <div class="pequeno">Obsérvate</div>
+
+    <h2>¿Cuál has estado intentando sostener?</h2>
+
+    <div class="grid-identidades">
+
+      <div class="tarjeta" onclick="seleccionarIdentidad(this,'victima')">
+        <h3>LA VÍCTIMA</h3>
+        <p>
+          Cuando sientes que la vida está constantemente atacándote.
+        </p>
+      </div>
+
+      <div class="tarjeta" onclick="seleccionarIdentidad(this,'heroe')">
+        <h3>EL HÉROE</h3>
+        <p>
+          Cuando necesitas demostrar que puedes con todo.
+        </p>
+      </div>
+
+      <div class="tarjeta" onclick="seleccionarIdentidad(this,'fuerte')">
+        <h3>EL FUERTE</h3>
+        <p>
+          Cuando sientes que no puedes permitirte ser vulnerable.
+        </p>
+      </div>
+
+      <div class="tarjeta" onclick="seleccionarIdentidad(this,'responsable')">
+        <h3>EL RESPONSABLE</h3>
+        <p>
+          Cuando sientes que todo depende de ti.
+        </p>
+      </div>
+
+    </div>
+
+    <div id="respuestaIdentidad">
+      No se trata de juzgarte.
+      Se trata de empezar a observarte.
+    </div>
+
+  </div>
+</section>
+
+
+<!-- CAPITULOS -->
+
+<section class="seccion capitulos">
+
+  <div class="contenedor">
+
+    <div class="centrado">
+
+      <div class="pequeno">Esto es solo el comienzo</div>
+
+      <h2>El viaje continúa</h2>
+
+      <p>
+        Diez capítulos para comprender y desmontar,
+        paso a paso, esa lucha interna.
+      </p>
+
+    </div>
+
+    <div class="lista-capitulos">
+
+      <div class="capitulo">
+        <div class="numero">01</div>
+        <div>
+          <strong>La lucha que no existe</strong>
+          Lo que ocurre frente a la historia que construyes.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">02</div>
+        <div>
+          <strong>El estrés como defensa de la imagen</strong>
+          El cansancio de intentar ser quien crees que debes ser.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">03</div>
+        <div>
+          <strong>El ego: guardián del control y la imagen</strong>
+          Cuando “tiene que ser así” se convierte en tensión.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">04</div>
+        <div>
+          <strong>El miedo del ego a ser nadie</strong>
+          La necesidad de demostrar, sobresalir y sentirte importante.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">05</div>
+        <div>
+          <strong>Estrés real vs. estrés del ego</strong>
+          Aprende a distinguirlos.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">06</div>
+        <div>
+          <strong>La ilusión de seguridad</strong>
+          Cuando intentar controlar más termina generando más tensión.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">07</div>
+        <div>
+          <strong>Los futuros catastróficos</strong>
+          Deja de vivir anticipadamente problemas que todavía no existen.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">08</div>
+        <div>
+          <strong>Soltar la imagen y volver al ser real</strong>
+          Reconoce el personaje que has estado intentando sostener.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">09</div>
+        <div>
+          <strong>Herramientas prácticas</strong>
+          Respiración, pausas, desidentificación, registro emocional y más.
+        </div>
+      </div>
+
+      <div class="capitulo">
+        <div class="numero">10</div>
+        <div>
+          <strong>Vivir ligero</strong>
+          Una relación diferente contigo y con la vida.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- CTA -->
+
+<section class="seccion cta centrado">
+
+  <div class="contenedor">
+
+    <div class="pequeno">Estrés — Cómo liberarte de una lucha innecesaria</div>
+
+    <h2>
+      Lo que acabas de leer
+      <span class="azul">es solo el comienzo.</span>
+    </h2>
+
+    <p class="suave" style="margin-top:30px;font-size:1.2rem;">
+      Si estas primeras páginas resonaron contigo,
+      el libro completo te espera.
+    </p>
+
+    <a
+      href="https://go.hotmart.com/W103080068I"
+      target="_blank"
+      class="boton"
+      style="font-size:1.1rem;padding:19px 34px;"
+    >
+      CONTINUAR CON EL VIAJE →
+    </a>
+
+  </div>
+</section>
+
+
+<!-- CIERRE -->
+
+<section class="seccion cierre centrado">
+
+  <div class="contenedor">
+
+    <div class="frases-finales">
+      No tienes que controlar más.<br>
+      No tienes que demostrar más.<br>
+      No tienes que luchar más.<br><br>
+
+      <span class="azul">
+        Tal vez solo necesitas empezar a soltar.
+      </span>
+    </div>
+
+    <h2>ESTRÉS</h2>
+
+    <p class="suave">
+      Cómo liberarte de una lucha innecesaria
+    </p>
+
+    <p>
+      <em>Inspirado por Wilfran Fonnegra</em>
+    </p>
+
+    <a
+      href="https://go.hotmart.com/W103080068I"
+      target="_blank"
+      class="boton"
+    >
+      CONTINUAR CON EL VIAJE →
+    </a>
+
+  </div>
+</section>
+
+
+<footer>
+  TRANSFORMATE
+</footer>
+
+
+<script>
+
+  /* PAGINAS DEL LIBRO */
+
+  let paginaActual = 0;
+
+  const paginas = document.querySelectorAll(".pagina-libro");
+  const indicador = document.getElementById("indicadorPagina");
+
+  function mostrarPagina(){
+
+    paginas.forEach((pagina,indice)=>{
+      pagina.classList.toggle("activa",indice === paginaActual);
+    });
+
+    indicador.textContent =
+      "Página " + (paginaActual + 1) + " de " + paginas.length;
+  }
+
+  function paginaSiguiente(){
+
+    if(paginaActual < paginas.length - 1){
+      paginaActual++;
+      mostrarPagina();
+
+      document
+        .getElementById("libro")
+        .scrollIntoView({behavior:"smooth"});
+    }
+  }
+
+  function paginaAnterior(){
+
+    if(paginaActual > 0){
+      paginaActual--;
+      mostrarPagina();
+
+      document
+        .getElementById("libro")
+        .scrollIntoView({behavior:"smooth"});
+    }
+  }
+
+
+  /* IDENTIDADES */
+
+  function seleccionarIdentidad(elemento,tipo){
+
+    document.querySelectorAll(".tarjeta")
+      .forEach(t => t.classList.remove("seleccionada"));
+
+    elemento.classList.add("seleccionada");
+
+    const mensajes = {
+
+      victima:
+        "A veces el estrés aparece cuando sentimos que todo lo que ocurre está dirigido contra nosotros.",
+
+      heroe:
+        "A veces el cansancio comienza cuando creemos que siempre debemos demostrar que podemos con todo.",
+
+      fuerte:
+        "Ser fuerte puede convertirse en una carga cuando creemos que nunca podemos mostrarnos vulnerables.",
+
+      responsable:
+        "Hacer nuestra parte es saludable. Sentir que absolutamente todo depende de nosotros puede convertirse en una lucha permanente."
+
+    };
+
+    document.getElementById("respuestaIdentidad").innerHTML =
+      mensajes[tipo] +
+      "<br><br><strong>No se trata de juzgarte. Se trata de observar el personaje que quizá has estado intentando sostener.</strong>";
+  }
+
+</script>
+
+</body>
+</html>
