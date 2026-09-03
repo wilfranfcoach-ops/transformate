@@ -997,10 +997,12 @@ footer {
 
 
 ```html
+```html
 <script>
 
 /* =====================================================
-   SONIDO CINEMATOGRÁFICO DE TRANSFORMATE
+   TRANSFORMATE — IMPACTO CINEMATOGRÁFICO
+   Sin sonidos musicales ni "chipotes"
    ===================================================== */
 
 const botonLibros = document.getElementById("btnExplorarLibros");
@@ -1011,162 +1013,209 @@ botonLibros.addEventListener("click", function(event) {
   event.preventDefault();
 
   const AudioContext = window.AudioContext || window.webkitAudioContext;
-  const audioContext = new AudioContext();
+  const ctx = new AudioContext();
 
-  const ahora = audioContext.currentTime;
+  const now = ctx.currentTime;
 
-  /* =================================================
-     1. GOLPE GRAVE PRINCIPAL
-     ================================================= */
+  /* =====================================================
+     MASTER
+     ===================================================== */
 
-  const golpe = audioContext.createOscillator();
-  const golpeGanancia = audioContext.createGain();
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(0.0001, now);
+  master.gain.exponentialRampToValueAtTime(0.9, now + 0.025);
+  master.gain.exponentialRampToValueAtTime(0.0001, now + 1.8);
 
-  golpe.type = "sine";
-
-  golpe.frequency.setValueAtTime(95, ahora);
-  golpe.frequency.exponentialRampToValueAtTime(42, ahora + 0.9);
-
-  golpeGanancia.gain.setValueAtTime(0.0001, ahora);
-  golpeGanancia.gain.exponentialRampToValueAtTime(0.42, ahora + 0.035);
-  golpeGanancia.gain.exponentialRampToValueAtTime(0.0001, ahora + 1.25);
-
-  golpe.connect(golpeGanancia);
-  golpeGanancia.connect(audioContext.destination);
-
-  golpe.start(ahora);
-  golpe.stop(ahora + 1.3);
+  master.connect(ctx.destination);
 
 
-  /* =================================================
-     2. RESONANCIA PROFUNDA
-     ================================================= */
+  /* =====================================================
+     1. SUBGRAVE — EL PESO DEL IMPACTO
+     ===================================================== */
 
-  const resonancia = audioContext.createOscillator();
-  const resonanciaGanancia = audioContext.createGain();
+  const sub = ctx.createOscillator();
+  const subGain = ctx.createGain();
 
-  resonancia.type = "triangle";
+  sub.type = "sine";
 
-  resonancia.frequency.setValueAtTime(120, ahora + 0.08);
-  resonancia.frequency.exponentialRampToValueAtTime(
-    180,
-    ahora + 0.75
+  sub.frequency.setValueAtTime(75, now);
+  sub.frequency.exponentialRampToValueAtTime(28, now + 0.65);
+
+  subGain.gain.setValueAtTime(0.0001, now);
+  subGain.gain.exponentialRampToValueAtTime(1.0, now + 0.025);
+  subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+
+  sub.connect(subGain);
+  subGain.connect(master);
+
+  sub.start(now);
+  sub.stop(now + 1);
+
+
+  /* =====================================================
+     2. IMPACTO — GOLPE CORTO Y PESADO
+     ===================================================== */
+
+  const impact = ctx.createOscillator();
+  const impactGain = ctx.createGain();
+
+  impact.type = "sine";
+
+  impact.frequency.setValueAtTime(160, now);
+  impact.frequency.exponentialRampToValueAtTime(48, now + 0.32);
+
+  impactGain.gain.setValueAtTime(0.0001, now);
+  impactGain.gain.exponentialRampToValueAtTime(0.7, now + 0.015);
+  impactGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+
+  impact.connect(impactGain);
+  impactGain.connect(master);
+
+  impact.start(now);
+  impact.stop(now + 0.5);
+
+
+  /* =====================================================
+     3. RUIDO — TEXTURA CINEMATOGRÁFICA
+     ===================================================== */
+
+  const bufferSize = ctx.sampleRate * 1.5;
+  const buffer = ctx.createBuffer(
+    1,
+    bufferSize,
+    ctx.sampleRate
   );
 
-  resonanciaGanancia.gain.setValueAtTime(
-    0.0001,
-    ahora + 0.05
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+
+  const noise = ctx.createBufferSource();
+  const noiseFilter = ctx.createBiquadFilter();
+  const noiseGain = ctx.createGain();
+
+  noise.buffer = buffer;
+
+  noiseFilter.type = "lowpass";
+  noiseFilter.frequency.setValueAtTime(350, now);
+  noiseFilter.frequency.exponentialRampToValueAtTime(
+    4500,
+    now + 0.8
   );
 
-  resonanciaGanancia.gain.exponentialRampToValueAtTime(
+  noiseGain.gain.setValueAtTime(0.0001, now + 0.05);
+  noiseGain.gain.exponentialRampToValueAtTime(
     0.18,
-    ahora + 0.15
+    now + 0.35
   );
 
-  resonanciaGanancia.gain.exponentialRampToValueAtTime(
+  noiseGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    ahora + 1.35
+    now + 1.15
   );
 
-  resonancia.connect(resonanciaGanancia);
-  resonanciaGanancia.connect(audioContext.destination);
+  noise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(master);
 
-  resonancia.start(ahora + 0.05);
-  resonancia.stop(ahora + 1.4);
+  noise.start(now + 0.05);
+  noise.stop(now + 1.2);
 
 
-  /* =================================================
-     3. ASCENSO — SENSACIÓN DE TRANSFORMACIÓN
-     ================================================= */
+  /* =====================================================
+     4. WHOOSH ASCENDENTE
+     ===================================================== */
 
-  const ascenso = audioContext.createOscillator();
-  const ascensoGanancia = audioContext.createGain();
+  const whoosh = ctx.createOscillator();
+  const whooshGain = ctx.createGain();
 
-  ascenso.type = "sine";
+  whoosh.type = "sawtooth";
 
-  ascenso.frequency.setValueAtTime(
-    180,
-    ahora + 0.25
+  whoosh.frequency.setValueAtTime(
+    80,
+    now + 0.15
   );
 
-  ascenso.frequency.exponentialRampToValueAtTime(
-    420,
-    ahora + 1.15
+  whoosh.frequency.exponentialRampToValueAtTime(
+    900,
+    now + 0.95
   );
 
-  ascensoGanancia.gain.setValueAtTime(
+  whooshGain.gain.setValueAtTime(
     0.0001,
-    ahora + 0.25
+    now + 0.15
   );
 
-  ascensoGanancia.gain.exponentialRampToValueAtTime(
-    0.13,
-    ahora + 0.55
+  whooshGain.gain.exponentialRampToValueAtTime(
+    0.055,
+    now + 0.55
   );
 
-  ascensoGanancia.gain.exponentialRampToValueAtTime(
+  whooshGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    ahora + 1.3
+    now + 1.05
   );
 
-  ascenso.connect(ascensoGanancia);
-  ascensoGanancia.connect(audioContext.destination);
+  whoosh.connect(whooshGain);
+  whooshGain.connect(master);
 
-  ascenso.start(ahora + 0.25);
-  ascenso.stop(ahora + 1.35);
+  whoosh.start(now + 0.15);
+  whoosh.stop(now + 1.1);
 
 
-  /* =================================================
-     4. BRILLO FINAL
-     ================================================= */
+  /* =====================================================
+     5. IMPACTO FINAL — MOMENTO DE TRANSFORMATE
+     ===================================================== */
 
-  const brillo = audioContext.createOscillator();
-  const brilloGanancia = audioContext.createGain();
+  const finalImpact = ctx.createOscillator();
+  const finalGain = ctx.createGain();
 
-  brillo.type = "sine";
+  finalImpact.type = "sine";
 
-  brillo.frequency.setValueAtTime(
-    600,
-    ahora + 0.95
+  finalImpact.frequency.setValueAtTime(
+    95,
+    now + 0.72
   );
 
-  brillo.frequency.exponentialRampToValueAtTime(
-    1050,
-    ahora + 1.25
+  finalImpact.frequency.exponentialRampToValueAtTime(
+    38,
+    now + 1.15
   );
 
-  brilloGanancia.gain.setValueAtTime(
+  finalGain.gain.setValueAtTime(
     0.0001,
-    ahora + 0.95
+    now + 0.72
   );
 
-  brilloGanancia.gain.exponentialRampToValueAtTime(
-    0.09,
-    ahora + 1.02
+  finalGain.gain.exponentialRampToValueAtTime(
+    0.5,
+    now + 0.77
   );
 
-  brilloGanancia.gain.exponentialRampToValueAtTime(
+  finalGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    ahora + 1.55
+    now + 1.5
   );
 
-  brillo.connect(brilloGanancia);
-  brilloGanancia.connect(audioContext.destination);
+  finalImpact.connect(finalGain);
+  finalGain.connect(master);
 
-  brillo.start(ahora + 0.95);
-  brillo.stop(ahora + 1.6);
+  finalImpact.start(now + 0.72);
+  finalImpact.stop(now + 1.55);
 
 
-  /* =================================================
-     5. ACTIVAR LA TRANSICIÓN VISUAL
-     ================================================= */
+  /* =====================================================
+     6. TRANSICIÓN VISUAL
+     ===================================================== */
 
   transicionLibros.classList.add("activa");
 
 
-  /* =================================================
-     6. ENTRADA A LOS LIBROS
-     ================================================= */
+  /* =====================================================
+     7. ENTRADA A LOS LIBROS
+     ===================================================== */
 
   setTimeout(function() {
 
@@ -1175,33 +1224,35 @@ botonLibros.addEventListener("click", function(event) {
       block: "start"
     });
 
-  }, 650);
+  }, 750);
 
 
-  /* =================================================
-     7. QUITAR LA PANTALLA DE TRANSICIÓN
-     ================================================= */
+  /* =====================================================
+     8. RETIRAR TRANSICIÓN
+     ===================================================== */
 
   setTimeout(function() {
 
     transicionLibros.classList.remove("activa");
 
-  }, 1450);
+  }, 1550);
 
 
-  /* =================================================
-     8. CERRAR AUDIO
-     ================================================= */
+  /* =====================================================
+     9. CERRAR AUDIO
+     ===================================================== */
 
   setTimeout(function() {
 
-    audioContext.close();
+    ctx.close();
 
-  }, 1900);
+  }, 2000);
 
 });
 
 </script>
+```
+
 ```
 
 
