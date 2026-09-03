@@ -996,10 +996,11 @@ footer {
 </footer>
 
 
+```html
 <script>
 
 /* =====================================================
-   SONIDO + TRANSICIÓN AL ENTRAR A LOS LIBROS
+   SONIDO CINEMATOGRÁFICO DE TRANSFORMATE
    ===================================================== */
 
 const botonLibros = document.getElementById("btnExplorarLibros");
@@ -1009,67 +1010,163 @@ botonLibros.addEventListener("click", function(event) {
 
   event.preventDefault();
 
-  /*
-    Creamos el sonido directamente en el navegador.
-    No necesitamos ningún archivo MP3.
-  */
-
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioContext = new AudioContext();
 
   const ahora = audioContext.currentTime;
 
-  /* Tono principal: profundo y suave */
-  const oscilador = audioContext.createOscillator();
-  const ganancia = audioContext.createGain();
+  /* =================================================
+     1. GOLPE GRAVE PRINCIPAL
+     ================================================= */
 
-  oscilador.type = "sine";
+  const golpe = audioContext.createOscillator();
+  const golpeGanancia = audioContext.createGain();
 
-  oscilador.frequency.setValueAtTime(155, ahora);
-  oscilador.frequency.exponentialRampToValueAtTime(230, ahora + 0.65);
+  golpe.type = "sine";
 
-  ganancia.gain.setValueAtTime(0.0001, ahora);
-  ganancia.gain.exponentialRampToValueAtTime(0.12, ahora + 0.08);
-  ganancia.gain.exponentialRampToValueAtTime(0.0001, ahora + 1.0);
+  golpe.frequency.setValueAtTime(95, ahora);
+  golpe.frequency.exponentialRampToValueAtTime(42, ahora + 0.9);
 
-  oscilador.connect(ganancia);
-  ganancia.connect(audioContext.destination);
+  golpeGanancia.gain.setValueAtTime(0.0001, ahora);
+  golpeGanancia.gain.exponentialRampToValueAtTime(0.42, ahora + 0.035);
+  golpeGanancia.gain.exponentialRampToValueAtTime(0.0001, ahora + 1.25);
 
-  oscilador.start(ahora);
-  oscilador.stop(ahora + 1.05);
+  golpe.connect(golpeGanancia);
+  golpeGanancia.connect(audioContext.destination);
+
+  golpe.start(ahora);
+  golpe.stop(ahora + 1.3);
 
 
-  /* Pequeño brillo final */
+  /* =================================================
+     2. RESONANCIA PROFUNDA
+     ================================================= */
+
+  const resonancia = audioContext.createOscillator();
+  const resonanciaGanancia = audioContext.createGain();
+
+  resonancia.type = "triangle";
+
+  resonancia.frequency.setValueAtTime(120, ahora + 0.08);
+  resonancia.frequency.exponentialRampToValueAtTime(
+    180,
+    ahora + 0.75
+  );
+
+  resonanciaGanancia.gain.setValueAtTime(
+    0.0001,
+    ahora + 0.05
+  );
+
+  resonanciaGanancia.gain.exponentialRampToValueAtTime(
+    0.18,
+    ahora + 0.15
+  );
+
+  resonanciaGanancia.gain.exponentialRampToValueAtTime(
+    0.0001,
+    ahora + 1.35
+  );
+
+  resonancia.connect(resonanciaGanancia);
+  resonanciaGanancia.connect(audioContext.destination);
+
+  resonancia.start(ahora + 0.05);
+  resonancia.stop(ahora + 1.4);
+
+
+  /* =================================================
+     3. ASCENSO — SENSACIÓN DE TRANSFORMACIÓN
+     ================================================= */
+
+  const ascenso = audioContext.createOscillator();
+  const ascensoGanancia = audioContext.createGain();
+
+  ascenso.type = "sine";
+
+  ascenso.frequency.setValueAtTime(
+    180,
+    ahora + 0.25
+  );
+
+  ascenso.frequency.exponentialRampToValueAtTime(
+    420,
+    ahora + 1.15
+  );
+
+  ascensoGanancia.gain.setValueAtTime(
+    0.0001,
+    ahora + 0.25
+  );
+
+  ascensoGanancia.gain.exponentialRampToValueAtTime(
+    0.13,
+    ahora + 0.55
+  );
+
+  ascensoGanancia.gain.exponentialRampToValueAtTime(
+    0.0001,
+    ahora + 1.3
+  );
+
+  ascenso.connect(ascensoGanancia);
+  ascensoGanancia.connect(audioContext.destination);
+
+  ascenso.start(ahora + 0.25);
+  ascenso.stop(ahora + 1.35);
+
+
+  /* =================================================
+     4. BRILLO FINAL
+     ================================================= */
 
   const brillo = audioContext.createOscillator();
   const brilloGanancia = audioContext.createGain();
 
   brillo.type = "sine";
 
-  brillo.frequency.setValueAtTime(620, ahora + 0.48);
-  brillo.frequency.exponentialRampToValueAtTime(880, ahora + 0.72);
+  brillo.frequency.setValueAtTime(
+    600,
+    ahora + 0.95
+  );
 
-  brilloGanancia.gain.setValueAtTime(0.0001, ahora + 0.48);
-  brilloGanancia.gain.exponentialRampToValueAtTime(0.035, ahora + 0.53);
-  brilloGanancia.gain.exponentialRampToValueAtTime(0.0001, ahora + 0.82);
+  brillo.frequency.exponentialRampToValueAtTime(
+    1050,
+    ahora + 1.25
+  );
+
+  brilloGanancia.gain.setValueAtTime(
+    0.0001,
+    ahora + 0.95
+  );
+
+  brilloGanancia.gain.exponentialRampToValueAtTime(
+    0.09,
+    ahora + 1.02
+  );
+
+  brilloGanancia.gain.exponentialRampToValueAtTime(
+    0.0001,
+    ahora + 1.55
+  );
 
   brillo.connect(brilloGanancia);
   brilloGanancia.connect(audioContext.destination);
 
-  brillo.start(ahora + 0.48);
-  brillo.stop(ahora + 0.85);
+  brillo.start(ahora + 0.95);
+  brillo.stop(ahora + 1.6);
 
 
-  /* Activamos la transición */
+  /* =================================================
+     5. ACTIVAR LA TRANSICIÓN VISUAL
+     ================================================= */
 
   transicionLibros.classList.add("activa");
 
 
-  /*
-    Esperamos un instante para que se perciba
-    el sonido y la transición antes de llevar
-    al usuario a la sección de libros.
-  */
+  /* =================================================
+     6. ENTRADA A LOS LIBROS
+     ================================================= */
 
   setTimeout(function() {
 
@@ -1078,29 +1175,35 @@ botonLibros.addEventListener("click", function(event) {
       block: "start"
     });
 
-  }, 350);
+  }, 650);
 
 
-  /* Quitamos la pantalla de transición */
+  /* =================================================
+     7. QUITAR LA PANTALLA DE TRANSICIÓN
+     ================================================= */
 
   setTimeout(function() {
 
     transicionLibros.classList.remove("activa");
 
-  }, 950);
+  }, 1450);
 
 
-  /* Cerramos el contexto de audio después del sonido */
+  /* =================================================
+     8. CERRAR AUDIO
+     ================================================= */
 
   setTimeout(function() {
 
     audioContext.close();
 
-  }, 1300);
+  }, 1900);
 
 });
 
 </script>
+```
+
 
 </body>
 </html>
