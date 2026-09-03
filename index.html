@@ -994,9 +994,6 @@ footer {
   Ideas para convertirte en la persona que quieres ser.
 
 </footer>
-
-
-
 <script>
 const btnExplorar = document.getElementById("btnExplorarLibros");
 
@@ -1020,15 +1017,30 @@ btnExplorar.addEventListener("click", async function (e) {
 
   await ctx.resume();
 
-  const master = ctx.createGain();
-  master.gain.setValueAtTime(0.0001, ctx.currentTime);
 
+  // ==========================================
+  // MASTER
+  // ==========================================
+  const master = ctx.createGain();
+
+  master.gain.setValueAtTime(
+    0.0001,
+    ctx.currentTime
+  );
+
+
+  // ==========================================
+  // FILTRO
+  // ELIMINA LOS AGUDOS
+  // ==========================================
   const filter = ctx.createBiquadFilter();
+
   filter.type = "lowpass";
 
-  // Dejamos pasar el golpe inicial,
-  // pero eliminamos progresivamente los agudos.
-  filter.frequency.setValueAtTime(900, ctx.currentTime);
+  filter.frequency.setValueAtTime(
+    900,
+    ctx.currentTime
+  );
 
   filter.frequency.exponentialRampToValueAtTime(
     220,
@@ -1040,7 +1052,7 @@ btnExplorar.addEventListener("click", async function (e) {
 
 
   // ==========================================
-  // 💥 GOLPE INICIAL
+  // 💥 1. GOLPE PRINCIPAL
   // ==========================================
   const impact = ctx.createOscillator();
   const impactGain = ctx.createGain();
@@ -1057,18 +1069,20 @@ btnExplorar.addEventListener("click", async function (e) {
     ctx.currentTime + 0.9
   );
 
+
   impactGain.gain.setValueAtTime(
     0.0001,
     ctx.currentTime
   );
 
+  // GOLPE FUERTE
   impactGain.gain.exponentialRampToValueAtTime(
-    1.0,
+    1.15,
     ctx.currentTime + 0.025
   );
 
   impactGain.gain.exponentialRampToValueAtTime(
-    0.35,
+    0.40,
     ctx.currentTime + 0.65
   );
 
@@ -1076,6 +1090,7 @@ btnExplorar.addEventListener("click", async function (e) {
     0.0001,
     ctx.currentTime + 1.4
   );
+
 
   impact.connect(impactGain);
   impactGain.connect(master);
@@ -1085,80 +1100,87 @@ btnExplorar.addEventListener("click", async function (e) {
 
 
   // ==========================================
-  // 🔊 RESONANCIA LARGA
+  // 🔊 2. RESONANCIA GRAVE MUY LARGA
   // ==========================================
   const resonance = ctx.createOscillator();
   const resonanceGain = ctx.createGain();
 
   resonance.type = "sine";
 
-  // Comienza justo después del golpe
+
+  // FRECUENCIA INICIAL
   resonance.frequency.setValueAtTime(
     48,
     ctx.currentTime + 0.15
   );
 
-  // Baja MUY lentamente.
-  // No la llevamos a infrasonido.
+  // BAJA MUY LENTAMENTE
+  // PERO SIEMPRE PERMANECE AUDIBLE
   resonance.frequency.exponentialRampToValueAtTime(
     36,
     ctx.currentTime + 16
   );
 
+
+  // VOLUMEN
   resonanceGain.gain.setValueAtTime(
     0.0001,
     ctx.currentTime
   );
 
+  // ENTRA FUERTE DESPUÉS DEL IMPACTO
   resonanceGain.gain.exponentialRampToValueAtTime(
-    0.38,
+    0.58,
     ctx.currentTime + 0.25
   );
 
-  // 0–4 segundos
+
+  // ==========================================
+  // DESCENSO MUY LENTO
+  // ==========================================
+
   resonanceGain.gain.exponentialRampToValueAtTime(
-    0.23,
+    0.34,
     ctx.currentTime + 4
   );
 
-  // 4–8 segundos
   resonanceGain.gain.exponentialRampToValueAtTime(
-    0.14,
+    0.21,
     ctx.currentTime + 8
   );
 
-  // 8–12 segundos
   resonanceGain.gain.exponentialRampToValueAtTime(
-    0.075,
+    0.11,
     ctx.currentTime + 12
   );
 
-  // 12–16 segundos
   resonanceGain.gain.exponentialRampToValueAtTime(
-    0.025,
+    0.045,
     ctx.currentTime + 16
   );
 
-  // Desaparición MUY suave
+  // DESAPARICIÓN FINAL
   resonanceGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    ctx.currentTime + 19
+    ctx.currentTime + 20
   );
+
 
   resonance.connect(resonanceGain);
   resonanceGain.connect(master);
 
   resonance.start(ctx.currentTime + 0.15);
-  resonance.stop(ctx.currentTime + 19.2);
+  resonance.stop(ctx.currentTime + 20.2);
 
 
   // ==========================================
-  // 🔉 CAPA PROFUNDA DEL IMPACTO
+  // 🔉 3. SEGUNDA CAPA PROFUNDA
   // ==========================================
   const deep = ctx.createOscillator();
   const deepGain = ctx.createGain();
 
   deep.type = "sine";
+
 
   deep.frequency.setValueAtTime(
     62,
@@ -1170,18 +1192,19 @@ btnExplorar.addEventListener("click", async function (e) {
     ctx.currentTime + 7
   );
 
+
   deepGain.gain.setValueAtTime(
     0.0001,
     ctx.currentTime
   );
 
   deepGain.gain.exponentialRampToValueAtTime(
-    0.25,
+    0.38,
     ctx.currentTime + 0.05
   );
 
   deepGain.gain.exponentialRampToValueAtTime(
-    0.07,
+    0.12,
     ctx.currentTime + 3
   );
 
@@ -1189,6 +1212,7 @@ btnExplorar.addEventListener("click", async function (e) {
     0.0001,
     ctx.currentTime + 8
   );
+
 
   deep.connect(deepGain);
   deepGain.connect(master);
@@ -1200,53 +1224,56 @@ btnExplorar.addEventListener("click", async function (e) {
   // ==========================================
   // 🎚️ VOLUMEN GENERAL
   // ==========================================
+
   master.gain.setValueAtTime(
     0.0001,
     ctx.currentTime
   );
 
-  // GOLPE
+  // 💥 IMPACTO
   master.gain.exponentialRampToValueAtTime(
-    0.9,
+    1.15,
     ctx.currentTime + 0.04
   );
 
-  // Empieza a bajar
+  // PRIMERA CAÍDA
   master.gain.exponentialRampToValueAtTime(
-    0.55,
+    0.72,
     ctx.currentTime + 1
   );
 
-  // Cola
+  // COLA
   master.gain.exponentialRampToValueAtTime(
-    0.28,
+    0.40,
     ctx.currentTime + 4
   );
 
   master.gain.exponentialRampToValueAtTime(
-    0.15,
+    0.22,
     ctx.currentTime + 8
   );
 
   master.gain.exponentialRampToValueAtTime(
-    0.075,
+    0.12,
     ctx.currentTime + 12
   );
 
   master.gain.exponentialRampToValueAtTime(
-    0.025,
+    0.055,
     ctx.currentTime + 16
   );
 
+  // FINAL
   master.gain.exponentialRampToValueAtTime(
     0.0001,
-    ctx.currentTime + 20
+    ctx.currentTime + 20.5
   );
 
 
   // ==========================================
   // 📖 BAJAR A LOS LIBROS
   // ==========================================
+
   setTimeout(() => {
 
     document.getElementById("mis-libros")
@@ -1260,6 +1287,7 @@ btnExplorar.addEventListener("click", async function (e) {
   // ==========================================
   // QUITAR TRANSICIÓN
   // ==========================================
+
   setTimeout(() => {
 
     transicion.classList.remove("activa");
@@ -1270,11 +1298,12 @@ btnExplorar.addEventListener("click", async function (e) {
   // ==========================================
   // CERRAR AUDIO
   // ==========================================
+
   setTimeout(() => {
 
     ctx.close();
 
-  }, 21000);
+  }, 22000);
 
 });
 </script>
