@@ -998,11 +998,11 @@ footer {
 
 ```html
 ```html
-```html
 <script>
 
 /* =====================================================
-   TRANSFORMATE — IMPACTO CINEMATOGRÁFICO + REVERB
+   TRANSFORMATE
+   IMPACTO CINEMATOGRÁFICO — BOOM + SUBGRAVE SOSTENIDO
    ===================================================== */
 
 const botonLibros = document.getElementById("btnExplorarLibros");
@@ -1025,56 +1025,60 @@ botonLibros.addEventListener("click", function(event) {
   const master = ctx.createGain();
 
   master.gain.setValueAtTime(0.0001, now);
-  master.gain.exponentialRampToValueAtTime(0.9, now + 0.025);
-  master.gain.exponentialRampToValueAtTime(0.0001, now + 4.5);
+  master.gain.exponentialRampToValueAtTime(0.82, now + 0.02);
+  master.gain.exponentialRampToValueAtTime(0.0001, now + 5.8);
 
   master.connect(ctx.destination);
 
 
   /* =====================================================
-     REVERBERACIÓN CINEMATOGRÁFICA
+     REVERB
      ===================================================== */
 
   const reverb = ctx.createConvolver();
 
-  const reverbTime = 4.2;
+  const reverbLength = 5.5;
+
   const reverbBuffer = ctx.createBuffer(
     2,
-    ctx.sampleRate * reverbTime,
+    ctx.sampleRate * reverbLength,
     ctx.sampleRate
   );
 
   for (let channel = 0; channel < 2; channel++) {
 
-    const channelData = reverbBuffer.getChannelData(channel);
+    const data = reverbBuffer.getChannelData(channel);
 
-    for (let i = 0; i < channelData.length; i++) {
+    for (let i = 0; i < data.length; i++) {
 
-      const decay = Math.pow(
-        1 - i / channelData.length,
-        2.4
-      );
+      const progress = i / data.length;
 
-      channelData[i] =
-        (Math.random() * 2 - 1) * decay;
+      const decay = Math.pow(1 - progress, 2.8);
 
+      data[i] =
+        (Math.random() * 2 - 1) *
+        decay *
+        0.75;
     }
   }
 
   reverb.buffer = reverbBuffer;
 
-
   const reverbGain = ctx.createGain();
 
-  reverbGain.gain.setValueAtTime(0.0001, now);
+  reverbGain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
   reverbGain.gain.exponentialRampToValueAtTime(
-    0.48,
-    now + 0.08
+    0.32,
+    now + 0.12
   );
 
   reverbGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 4.3
+    now + 5.2
   );
 
   reverb.connect(reverbGain);
@@ -1082,43 +1086,7 @@ botonLibros.addEventListener("click", function(event) {
 
 
   /* =====================================================
-     1. SUBGRAVE — EL BOOM
-     ===================================================== */
-
-  const sub = ctx.createOscillator();
-  const subGain = ctx.createGain();
-
-  sub.type = "sine";
-
-  sub.frequency.setValueAtTime(75, now);
-  sub.frequency.exponentialRampToValueAtTime(
-    28,
-    now + 0.65
-  );
-
-  subGain.gain.setValueAtTime(0.0001, now);
-
-  subGain.gain.exponentialRampToValueAtTime(
-    1.0,
-    now + 0.025
-  );
-
-  subGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 0.9
-  );
-
-  sub.connect(subGain);
-
-  subGain.connect(master);
-  subGain.connect(reverb);
-
-  sub.start(now);
-  sub.stop(now + 1);
-
-
-  /* =====================================================
-     2. IMPACTO PRINCIPAL
+     1. IMPACTO INICIAL
      ===================================================== */
 
   const impact = ctx.createOscillator();
@@ -1126,11 +1094,14 @@ botonLibros.addEventListener("click", function(event) {
 
   impact.type = "sine";
 
-  impact.frequency.setValueAtTime(160, now);
+  impact.frequency.setValueAtTime(
+    110,
+    now
+  );
 
   impact.frequency.exponentialRampToValueAtTime(
-    48,
-    now + 0.32
+    32,
+    now + 0.55
   );
 
   impactGain.gain.setValueAtTime(
@@ -1139,13 +1110,13 @@ botonLibros.addEventListener("click", function(event) {
   );
 
   impactGain.gain.exponentialRampToValueAtTime(
-    0.7,
-    now + 0.015
+    0.95,
+    now + 0.018
   );
 
   impactGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 0.42
+    now + 1.0
   );
 
   impact.connect(impactGain);
@@ -1154,90 +1125,223 @@ botonLibros.addEventListener("click", function(event) {
   impactGain.connect(reverb);
 
   impact.start(now);
-  impact.stop(now + 0.5);
+  impact.stop(now + 1.1);
 
 
   /* =====================================================
-     3. TEXTURA / AIRE
+     2. SUBGRAVE SOSTENIDO
+     
+     ESTE ES EL "BOOOOOOMMMMM"
      ===================================================== */
 
-  const bufferSize = ctx.sampleRate * 1.5;
+  const sub = ctx.createOscillator();
+  const subGain = ctx.createGain();
 
-  const buffer = ctx.createBuffer(
-    1,
-    bufferSize,
-    ctx.sampleRate
-  );
+  sub.type = "sine";
 
-  const data = buffer.getChannelData(0);
+  /*
+     Comienza muy profundo y cae lentamente.
+     La frecuencia permanece baja durante varios segundos.
+  */
 
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] = Math.random() * 2 - 1;
-  }
-
-  const noise = ctx.createBufferSource();
-
-  const noiseFilter = ctx.createBiquadFilter();
-
-  const noiseGain = ctx.createGain();
-
-  noise.buffer = buffer;
-
-  noiseFilter.type = "lowpass";
-
-  noiseFilter.frequency.setValueAtTime(
-    350,
-    now
-  );
-
-  noiseFilter.frequency.exponentialRampToValueAtTime(
-    4500,
-    now + 0.8
-  );
-
-  noiseGain.gain.setValueAtTime(
-    0.0001,
+  sub.frequency.setValueAtTime(
+    48,
     now + 0.05
   );
 
-  noiseGain.gain.exponentialRampToValueAtTime(
-    0.18,
-    now + 0.35
+  sub.frequency.exponentialRampToValueAtTime(
+    31,
+    now + 4.8
   );
 
-  noiseGain.gain.exponentialRampToValueAtTime(
+  subGain.gain.setValueAtTime(
     0.0001,
-    now + 1.15
+    now
   );
 
-  noise.connect(noiseFilter);
-  noiseFilter.connect(noiseGain);
+  /*
+     Entrada rápida.
+  */
 
-  noiseGain.connect(master);
-  noiseGain.connect(reverb);
+  subGain.gain.exponentialRampToValueAtTime(
+    0.62,
+    now + 0.08
+  );
 
-  noise.start(now + 0.05);
-  noise.stop(now + 1.2);
+  /*
+     Mantiene el cuerpo durante varios segundos.
+  */
+
+  subGain.gain.setValueAtTime(
+    0.48,
+    now + 0.8
+  );
+
+  subGain.gain.setValueAtTime(
+    0.34,
+    now + 2.2
+  );
+
+  subGain.gain.setValueAtTime(
+    0.20,
+    now + 3.6
+  );
+
+  /*
+     Desaparición muy lenta.
+  */
+
+  subGain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 5.4
+  );
+
+  sub.connect(subGain);
+
+  subGain.connect(master);
+  subGain.connect(reverb);
+
+  sub.start(now);
+  sub.stop(now + 5.6);
 
 
   /* =====================================================
-     4. WHOOSH
+     3. SEGUNDO CUERPO GRAVE
+     
+     No es otra nota.
+     Es una capa para hacer que el BOOM tenga profundidad.
+     ===================================================== */
+
+  const body = ctx.createOscillator();
+  const bodyGain = ctx.createGain();
+
+  body.type = "triangle";
+
+  body.frequency.setValueAtTime(
+    72,
+    now
+  );
+
+  body.frequency.exponentialRampToValueAtTime(
+    39,
+    now + 1.7
+  );
+
+  bodyGain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+  bodyGain.gain.exponentialRampToValueAtTime(
+    0.38,
+    now + 0.04
+  );
+
+  bodyGain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 2.7
+  );
+
+  body.connect(bodyGain);
+
+  bodyGain.connect(master);
+  bodyGain.connect(reverb);
+
+  body.start(now);
+  body.stop(now + 3);
+
+
+  /* =====================================================
+     4. ATAQUE / GOLPE CINEMATOGRÁFICO
+     ===================================================== */
+
+  const noiseBuffer = ctx.createBuffer(
+    1,
+    ctx.sampleRate * 0.8,
+    ctx.sampleRate
+  );
+
+  const noiseData = noiseBuffer.getChannelData(0);
+
+  for (let i = 0; i < noiseData.length; i++) {
+    noiseData[i] = Math.random() * 2 - 1;
+  }
+
+  const attack = ctx.createBufferSource();
+  const attackFilter = ctx.createBiquadFilter();
+  const attackGain = ctx.createGain();
+
+  attack.buffer = noiseBuffer;
+
+  attackFilter.type = "lowpass";
+
+  attackFilter.frequency.setValueAtTime(
+    1800,
+    now
+  );
+
+  attackFilter.frequency.exponentialRampToValueAtTime(
+    500,
+    now + 0.35
+  );
+
+  attackGain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+  attackGain.gain.exponentialRampToValueAtTime(
+    0.30,
+    now + 0.012
+  );
+
+  attackGain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 0.55
+  );
+
+  attack.connect(attackFilter);
+  attackFilter.connect(attackGain);
+
+  attackGain.connect(master);
+  attackGain.connect(reverb);
+
+  attack.start(now);
+  attack.stop(now + 0.65);
+
+
+  /* =====================================================
+     5. WHOOSH MUY SUTIL
+     
+     Solo acompaña la transformación.
      ===================================================== */
 
   const whoosh = ctx.createOscillator();
-
   const whooshGain = ctx.createGain();
+  const whooshFilter = ctx.createBiquadFilter();
 
   whoosh.type = "sawtooth";
 
   whoosh.frequency.setValueAtTime(
-    80,
+    90,
     now + 0.15
   );
 
   whoosh.frequency.exponentialRampToValueAtTime(
-    900,
-    now + 0.95
+    700,
+    now + 1.1
+  );
+
+  whooshFilter.type = "lowpass";
+
+  whooshFilter.frequency.setValueAtTime(
+    500,
+    now
+  );
+
+  whooshFilter.frequency.exponentialRampToValueAtTime(
+    2800,
+    now + 1.0
   );
 
   whooshGain.gain.setValueAtTime(
@@ -1246,77 +1350,77 @@ botonLibros.addEventListener("click", function(event) {
   );
 
   whooshGain.gain.exponentialRampToValueAtTime(
-    0.055,
-    now + 0.55
+    0.035,
+    now + 0.65
   );
 
   whooshGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 1.05
+    now + 1.25
   );
 
-  whoosh.connect(whooshGain);
+  whoosh.connect(whooshFilter);
+  whooshFilter.connect(whooshGain);
 
   whooshGain.connect(master);
   whooshGain.connect(reverb);
 
   whoosh.start(now + 0.15);
-  whoosh.stop(now + 1.1);
+  whoosh.stop(now + 1.3);
 
 
   /* =====================================================
-     5. IMPACTO FINAL
+     6. PEQUEÑA RESONANCIA FINAL
      ===================================================== */
 
-  const finalImpact = ctx.createOscillator();
+  const resonance = ctx.createOscillator();
+  const resonanceGain = ctx.createGain();
 
-  const finalGain = ctx.createGain();
+  resonance.type = "sine";
 
-  finalImpact.type = "sine";
-
-  finalImpact.frequency.setValueAtTime(
-    95,
-    now + 0.72
+  resonance.frequency.setValueAtTime(
+    52,
+    now + 0.75
   );
 
-  finalImpact.frequency.exponentialRampToValueAtTime(
-    38,
-    now + 1.15
+  resonance.frequency.exponentialRampToValueAtTime(
+    34,
+    now + 4.2
   );
 
-  finalGain.gain.setValueAtTime(
+  resonanceGain.gain.setValueAtTime(
     0.0001,
-    now + 0.72
+    now + 0.7
   );
 
-  finalGain.gain.exponentialRampToValueAtTime(
-    0.5,
-    now + 0.77
+  resonanceGain.gain.exponentialRampToValueAtTime(
+    0.20,
+    now + 1.0
   );
 
-  finalGain.gain.exponentialRampToValueAtTime(
+  resonanceGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 1.5
+    now + 4.8
   );
 
-  finalImpact.connect(finalGain);
+  resonance.connect(resonanceGain);
 
-  finalGain.connect(master);
-  finalGain.connect(reverb);
+  resonanceGain.connect(master);
+  resonanceGain.connect(reverb);
 
-  finalImpact.start(now + 0.72);
-  finalImpact.stop(now + 1.55);
+  resonance.start(now + 0.7);
+  resonance.stop(now + 5);
 
 
   /* =====================================================
-     6. TRANSICIÓN VISUAL
+     7. TRANSICIÓN VISUAL
      ===================================================== */
 
   transicionLibros.classList.add("activa");
 
 
   /* =====================================================
-     7. ENTRADA A LOS LIBROS
+     8. ENTRADA A LOS LIBROS
      ===================================================== */
 
   setTimeout(function() {
@@ -1330,7 +1434,7 @@ botonLibros.addEventListener("click", function(event) {
 
 
   /* =====================================================
-     8. QUITAR TRANSICIÓN VISUAL
+     9. QUITAR TRANSICIÓN
      ===================================================== */
 
   setTimeout(function() {
@@ -1341,21 +1445,20 @@ botonLibros.addEventListener("click", function(event) {
 
 
   /* =====================================================
-     9. CERRAR AUDIO DESPUÉS DE LA REVERBERACIÓN
+     10. CERRAR AUDIO
      ===================================================== */
 
   setTimeout(function() {
 
     ctx.close();
 
-  }, 5000);
+  }, 6500);
 
 });
 
 </script>
 ```
 
-```
 
 ```
 
