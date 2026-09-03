@@ -997,12 +997,12 @@ footer {
 
 
 ```html
-```html
-<script>
+```html<script>
 
 /* =====================================================
-   TRANSFORMATE — IMPACTO CINEMATOGRÁFICO
-   BOOM PROFUNDO + REVERBERACIÓN LARGA
+   TRANSFORMATE
+   BOOM CINEMATOGRÁFICO + GRAVE SOSTENIDO
+   SIN COLA AGUDA
    ===================================================== */
 
 const botonLibros = document.getElementById("btnExplorarLibros");
@@ -1031,192 +1031,58 @@ botonLibros.addEventListener("click", function(event) {
     now + 0.025
   );
 
+  /*
+     La cola completa dura bastante.
+     */
+
   master.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 7.2
+    now + 8.2
   );
 
   master.connect(ctx.destination);
 
 
   /* =====================================================
-     REVERBERACIÓN MUY LARGA
-     ===================================================== */
-
-  const reverb = ctx.createConvolver();
-
-  const reverbTime = 7.0;
-
-  const reverbBuffer = ctx.createBuffer(
-    2,
-    ctx.sampleRate * reverbTime,
-    ctx.sampleRate
-  );
-
-  for (let channel = 0; channel < 2; channel++) {
-
-    const channelData =
-      reverbBuffer.getChannelData(channel);
-
-    for (let i = 0; i < channelData.length; i++) {
-
-      const progress =
-        i / channelData.length;
-
-      /*
-         Caída progresiva.
-         La parte final queda muy suave.
-      */
-
-      const decay =
-        Math.pow(1 - progress, 3.4);
-
-      channelData[i] =
-        (Math.random() * 2 - 1) *
-        decay *
-        0.55;
-    }
-  }
-
-  reverb.buffer = reverbBuffer;
-
-
-  const reverbGain = ctx.createGain();
-
-  reverbGain.gain.setValueAtTime(
-    0.0001,
-    now
-  );
-
-  reverbGain.gain.exponentialRampToValueAtTime(
-    0.40,
-    now + 0.08
-  );
-
-  reverbGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 6.8
-  );
-
-  reverb.connect(reverbGain);
-
-  reverbGain.connect(ctx.destination);
-
-
-  /* =====================================================
-     FILTRO DE LA REVERBERACIÓN
+     FILTRO MASTER
      
-     IMPORTANTE:
-     Evita que la cola termine sonando chillona.
+     Elimina progresivamente las frecuencias agudas.
+     La cola será cada vez más grave.
      ===================================================== */
 
-  const reverbFilter = ctx.createBiquadFilter();
+  const masterFilter = ctx.createBiquadFilter();
 
-  reverbFilter.type = "lowpass";
+  masterFilter.type = "lowpass";
 
-  reverbFilter.frequency.setValueAtTime(
-    2200,
+  masterFilter.frequency.setValueAtTime(
+    1800,
     now
   );
 
-  reverbFilter.frequency.exponentialRampToValueAtTime(
-    420,
-    now + 5.8
+  masterFilter.frequency.exponentialRampToValueAtTime(
+    1200,
+    now + 1
   );
 
-  reverbFilter.Q.value = 0.5;
+  masterFilter.frequency.exponentialRampToValueAtTime(
+    500,
+    now + 4
+  );
 
-  reverb.connect(reverbFilter);
+  masterFilter.frequency.exponentialRampToValueAtTime(
+    180,
+    now + 7.5
+  );
 
-  reverbFilter.connect(reverbGain);
+  masterFilter.Q.value = 0.4;
+
+  master.connect(masterFilter);
+
+  masterFilter.connect(ctx.destination);
 
 
   /* =====================================================
-     1. SUBGRAVE — BOOM PRINCIPAL
-     ===================================================== */
-
-  const sub = ctx.createOscillator();
-  const subGain = ctx.createGain();
-
-  sub.type = "sine";
-
-  /*
-     Conservamos prácticamente el carácter
-     del sonido original.
-  */
-
-  sub.frequency.setValueAtTime(
-    75,
-    now
-  );
-
-  sub.frequency.exponentialRampToValueAtTime(
-    27,
-    now + 1.4
-  );
-
-  /*
-     ENTRA FUERTE...
-  */
-
-  subGain.gain.setValueAtTime(
-    0.0001,
-    now
-  );
-
-  subGain.gain.exponentialRampToValueAtTime(
-    1.0,
-    now + 0.025
-  );
-
-  /*
-     ...pero NO desaparece inmediatamente.
-  */
-
-  subGain.gain.exponentialRampToValueAtTime(
-    0.55,
-    now + 1.0
-  );
-
-  subGain.gain.exponentialRampToValueAtTime(
-    0.38,
-    now + 2.2
-  );
-
-  subGain.gain.exponentialRampToValueAtTime(
-    0.22,
-    now + 3.5
-  );
-
-  subGain.gain.exponentialRampToValueAtTime(
-    0.11,
-    now + 4.8
-  );
-
-  subGain.gain.exponentialRampToValueAtTime(
-    0.035,
-    now + 6.0
-  );
-
-  subGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 7.0
-  );
-
-  sub.connect(subGain);
-
-  subGain.connect(master);
-  subGain.connect(reverb);
-
-  sub.start(now);
-
-  sub.stop(now + 7.1);
-
-
-  /* =====================================================
-     2. IMPACTO PRINCIPAL
-     
-     MISMO CARÁCTER DEL SCRIPT QUE TE GUSTÓ
+     1. BOOM INICIAL
      ===================================================== */
 
   const impact = ctx.createOscillator();
@@ -1225,13 +1091,13 @@ botonLibros.addEventListener("click", function(event) {
   impact.type = "sine";
 
   impact.frequency.setValueAtTime(
-    160,
+    75,
     now
   );
 
   impact.frequency.exponentialRampToValueAtTime(
-    48,
-    now + 0.32
+    30,
+    now + 0.8
   );
 
   impactGain.gain.setValueAtTime(
@@ -1240,119 +1106,267 @@ botonLibros.addEventListener("click", function(event) {
   );
 
   impactGain.gain.exponentialRampToValueAtTime(
-    0.7,
-    now + 0.015
+    1.0,
+    now + 0.025
   );
 
   impactGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 0.42
+    now + 1.2
   );
 
   impact.connect(impactGain);
 
   impactGain.connect(master);
-  impactGain.connect(reverb);
 
   impact.start(now);
 
-  impact.stop(now + 0.5);
+  impact.stop(now + 1.3);
 
 
   /* =====================================================
-     3. TEXTURA / AIRE
+     2. CUERPO DEL BOOM
+     
+     Esta es la parte que queda resonando.
      ===================================================== */
 
-  const bufferSize =
-    ctx.sampleRate * 1.5;
+  const body = ctx.createOscillator();
+  const bodyGain = ctx.createGain();
 
-  const buffer = ctx.createBuffer(
-    1,
-    bufferSize,
-    ctx.sampleRate
+  body.type = "sine";
+
+  /*
+     Comienza grave.
+     */
+
+  body.frequency.setValueAtTime(
+    48,
+    now + 0.03
   );
 
-  const data =
-    buffer.getChannelData(0);
+  /*
+     Baja MUY lentamente.
+     */
 
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] =
-      Math.random() * 2 - 1;
-  }
+  body.frequency.exponentialRampToValueAtTime(
+    40,
+    now + 2.0
+  );
 
-  const noise =
-    ctx.createBufferSource();
+  body.frequency.exponentialRampToValueAtTime(
+    34,
+    now + 4.0
+  );
 
-  const noiseFilter =
-    ctx.createBiquadFilter();
+  body.frequency.exponentialRampToValueAtTime(
+    29,
+    now + 6.0
+  );
 
-  const noiseGain =
-    ctx.createGain();
+  body.frequency.exponentialRampToValueAtTime(
+    25,
+    now + 7.8
+  );
 
-  noise.buffer = buffer;
 
-  noiseFilter.type = "lowpass";
+  /* =====================================================
+     VOLUMEN DEL GRAVE
+     ===================================================== */
 
-  noiseFilter.frequency.setValueAtTime(
-    350,
+  bodyGain.gain.setValueAtTime(
+    0.0001,
     now
   );
 
-  noiseFilter.frequency.exponentialRampToValueAtTime(
-    4500,
+  /*
+     Entrada rápida.
+     */
+
+  bodyGain.gain.exponentialRampToValueAtTime(
+    0.62,
+    now + 0.08
+  );
+
+  /*
+     Mantenerlo presente.
+     */
+
+  bodyGain.gain.setValueAtTime(
+    0.55,
     now + 0.8
   );
 
-  noiseGain.gain.setValueAtTime(
+  bodyGain.gain.setValueAtTime(
+    0.47,
+    now + 2.0
+  );
+
+  bodyGain.gain.setValueAtTime(
+    0.37,
+    now + 3.5
+  );
+
+  bodyGain.gain.setValueAtTime(
+    0.27,
+    now + 5.0
+  );
+
+  bodyGain.gain.setValueAtTime(
+    0.16,
+    now + 6.3
+  );
+
+  /*
+     DESAPARICIÓN MUY LENTA.
+     */
+
+  bodyGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 0.05
+    now + 8.0
   );
 
-  noiseGain.gain.exponentialRampToValueAtTime(
-    0.18,
-    now + 0.35
-  );
+  body.connect(bodyGain);
 
-  noiseGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 1.15
-  );
+  bodyGain.connect(master);
 
-  noise.connect(noiseFilter);
+  body.start(now);
 
-  noiseFilter.connect(noiseGain);
-
-  noiseGain.connect(master);
-  noiseGain.connect(reverb);
-
-  noise.start(now + 0.05);
-
-  noise.stop(now + 1.2);
+  body.stop(now + 8.1);
 
 
   /* =====================================================
-     4. WHOOSH
+     3. SEGUNDA CAPA GRAVE
      
-     Lo dejamos exactamente como estaba,
-     pero su presencia será corta.
+     Da sensación de profundidad al BOOM.
+     También termina en grave.
      ===================================================== */
 
-  const whoosh =
-    ctx.createOscillator();
+  const deep = ctx.createOscillator();
+  const deepGain = ctx.createGain();
 
-  const whooshGain =
-    ctx.createGain();
+  deep.type = "sine";
 
-  whoosh.type = "sawtooth";
+  deep.frequency.setValueAtTime(
+    62,
+    now
+  );
+
+  deep.frequency.exponentialRampToValueAtTime(
+    31,
+    now + 3.5
+  );
+
+  deep.frequency.exponentialRampToValueAtTime(
+    24,
+    now + 7.0
+  );
+
+  deepGain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+  deepGain.gain.exponentialRampToValueAtTime(
+    0.28,
+    now + 0.1
+  );
+
+  deepGain.gain.setValueAtTime(
+    0.22,
+    now + 1.5
+  );
+
+  deepGain.gain.setValueAtTime(
+    0.16,
+    now + 3.5
+  );
+
+  deepGain.gain.setValueAtTime(
+    0.09,
+    now + 5.5
+  );
+
+  deepGain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 7.7
+  );
+
+  deep.connect(deepGain);
+
+  deepGain.connect(master);
+
+  deep.start(now);
+
+  deep.stop(now + 7.8);
+
+
+  /* =====================================================
+     4. IMPACTO CORTO
+     
+     Solo al principio.
+     NO queda en la cola.
+     ===================================================== */
+
+  const hit = ctx.createOscillator();
+  const hitGain = ctx.createGain();
+
+  hit.type = "sine";
+
+  hit.frequency.setValueAtTime(
+    160,
+    now
+  );
+
+  hit.frequency.exponentialRampToValueAtTime(
+    50,
+    now + 0.3
+  );
+
+  hitGain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+  hitGain.gain.exponentialRampToValueAtTime(
+    0.45,
+    now + 0.015
+  );
+
+  hitGain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 0.45
+  );
+
+  hit.connect(hitGain);
+
+  hitGain.connect(master);
+
+  hit.start(now);
+
+  hit.stop(now + 0.5);
+
+
+  /* =====================================================
+     5. WHOOSH MUY CORTO
+     
+     IMPORTANTE:
+     NO lo conectamos a ninguna reverberación.
+     Desaparece rápido.
+     ===================================================== */
+
+  const whoosh = ctx.createOscillator();
+  const whooshGain = ctx.createGain();
+
+  whoosh.type = "sine";
 
   whoosh.frequency.setValueAtTime(
-    80,
+    90,
     now + 0.15
   );
 
   whoosh.frequency.exponentialRampToValueAtTime(
-    900,
-    now + 0.95
+    450,
+    now + 0.7
   );
 
   whooshGain.gain.setValueAtTime(
@@ -1361,72 +1375,22 @@ botonLibros.addEventListener("click", function(event) {
   );
 
   whooshGain.gain.exponentialRampToValueAtTime(
-    0.055,
-    now + 0.55
+    0.025,
+    now + 0.4
   );
 
   whooshGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 1.05
+    now + 0.85
   );
 
   whoosh.connect(whooshGain);
 
   whooshGain.connect(master);
-  whooshGain.connect(reverb);
 
   whoosh.start(now + 0.15);
 
-  whoosh.stop(now + 1.1);
-
-
-  /* =====================================================
-     5. IMPACTO FINAL
-     
-     Conservamos el original.
-     ===================================================== */
-
-  const finalImpact =
-    ctx.createOscillator();
-
-  const finalGain =
-    ctx.createGain();
-
-  finalImpact.type = "sine";
-
-  finalImpact.frequency.setValueAtTime(
-    95,
-    now + 0.72
-  );
-
-  finalImpact.frequency.exponentialRampToValueAtTime(
-    38,
-    now + 1.15
-  );
-
-  finalGain.gain.setValueAtTime(
-    0.0001,
-    now + 0.72
-  );
-
-  finalGain.gain.exponentialRampToValueAtTime(
-    0.5,
-    now + 0.77
-  );
-
-  finalGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 1.5
-  );
-
-  finalImpact.connect(finalGain);
-
-  finalGain.connect(master);
-  finalGain.connect(reverb);
-
-  finalImpact.start(now + 0.72);
-
-  finalImpact.stop(now + 1.55);
+  whoosh.stop(now + 0.9);
 
 
   /* =====================================================
@@ -1469,11 +1433,12 @@ botonLibros.addEventListener("click", function(event) {
 
     ctx.close();
 
-  }, 7800);
+  }, 9000);
 
 });
 
 </script>
+
 ```
 
 
