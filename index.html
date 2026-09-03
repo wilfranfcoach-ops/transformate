@@ -998,7 +998,7 @@ footer {
 
 ```html
 
-  <script>
+<script>
 const btnExplorar = document.getElementById("btnExplorarLibros");
 
 btnExplorar.addEventListener("click", async () => {
@@ -1019,7 +1019,7 @@ btnExplorar.addEventListener("click", async () => {
 
 
   // =========================
-  // AUDIO CINEMÁTICO
+  // AUDIO
   // =========================
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -1030,44 +1030,59 @@ btnExplorar.addEventListener("click", async () => {
   const master = ctx.createGain();
   const filter = ctx.createBiquadFilter();
 
-  // FILTRO MUY GRAVE:
-  // elimina cualquier posibilidad de silbido
+  /*
+    FILTRO MUY GRAVE
+    Evita cualquier sonido agudo al final.
+  */
   filter.type = "lowpass";
-  filter.frequency.setValueAtTime(700, ctx.currentTime);
-  filter.frequency.exponentialRampToValueAtTime(
-    90,
-    ctx.currentTime + 7
+
+  filter.frequency.setValueAtTime(
+    700,
+    ctx.currentTime
   );
 
-  master.gain.setValueAtTime(0.0001, ctx.currentTime);
+  filter.frequency.exponentialRampToValueAtTime(
+    75,
+    ctx.currentTime + 16
+  );
 
   master.connect(filter);
   filter.connect(ctx.destination);
 
 
   // =====================================
-  // 1. GOLPE PRINCIPAL
+  // 1. IMPACTO INICIAL
   // =====================================
   const impact = ctx.createOscillator();
   const impactGain = ctx.createGain();
 
   impact.type = "sine";
 
-  impact.frequency.setValueAtTime(82, ctx.currentTime);
+  impact.frequency.setValueAtTime(
+    82,
+    ctx.currentTime
+  );
+
   impact.frequency.exponentialRampToValueAtTime(
     31,
     ctx.currentTime + 0.9
   );
 
-  impactGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+  impactGain.gain.setValueAtTime(
+    0.0001,
+    ctx.currentTime
+  );
+
   impactGain.gain.exponentialRampToValueAtTime(
     1.0,
     ctx.currentTime + 0.025
   );
+
   impactGain.gain.exponentialRampToValueAtTime(
     0.35,
     ctx.currentTime + 0.65
   );
+
   impactGain.gain.exponentialRampToValueAtTime(
     0.0001,
     ctx.currentTime + 1.4
@@ -1081,8 +1096,7 @@ btnExplorar.addEventListener("click", async () => {
 
 
   // =====================================
-  // 2. RESONANCIA GRAVE
-  // ESTA ES LA QUE ALARGA EL BOOM
+  // 2. RESONANCIA PRINCIPAL
   // =====================================
   const resonance = ctx.createOscillator();
   const resonanceGain = ctx.createGain();
@@ -1091,12 +1105,12 @@ btnExplorar.addEventListener("click", async () => {
 
   resonance.frequency.setValueAtTime(
     46,
-    ctx.currentTime + 0.15
+    ctx.currentTime + 0.12
   );
 
   resonance.frequency.exponentialRampToValueAtTime(
-    27,
-    ctx.currentTime + 7.8
+    24,
+    ctx.currentTime + 17.5
   );
 
   resonanceGain.gain.setValueAtTime(
@@ -1104,37 +1118,44 @@ btnExplorar.addEventListener("click", async () => {
     ctx.currentTime
   );
 
-  resonanceGain.gain.setValueAtTime(
+  resonanceGain.gain.exponentialRampToValueAtTime(
     0.48,
     ctx.currentTime + 0.18
   );
 
-  // CAÍDA MUY LENTA
+  // Primer descenso
   resonanceGain.gain.exponentialRampToValueAtTime(
-    0.20,
-    ctx.currentTime + 2.5
+    0.24,
+    ctx.currentTime + 4
   );
 
+  // Segundo descenso
   resonanceGain.gain.exponentialRampToValueAtTime(
-    0.08,
-    ctx.currentTime + 5.0
+    0.10,
+    ctx.currentTime + 9
   );
 
+  // Cola muy larga
+  resonanceGain.gain.exponentialRampToValueAtTime(
+    0.035,
+    ctx.currentTime + 14
+  );
+
+  // Desaparición
   resonanceGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    ctx.currentTime + 8.2
+    ctx.currentTime + 18
   );
 
   resonance.connect(resonanceGain);
   resonanceGain.connect(master);
 
   resonance.start(ctx.currentTime + 0.12);
-  resonance.stop(ctx.currentTime + 8.4);
+  resonance.stop(ctx.currentTime + 18.2);
 
 
   // =====================================
-  // 3. SEGUNDA CAPA GRAVE
-  // DA SENSACIÓN DE PROFUNDIDAD
+  // 3. SEGUNDA CAPA PROFUNDA
   // =====================================
   const deep = ctx.createOscillator();
   const deepGain = ctx.createGain();
@@ -1147,8 +1168,8 @@ btnExplorar.addEventListener("click", async () => {
   );
 
   deep.frequency.exponentialRampToValueAtTime(
-    29,
-    ctx.currentTime + 5.5
+    28,
+    ctx.currentTime + 11
   );
 
   deepGain.gain.setValueAtTime(
@@ -1162,20 +1183,24 @@ btnExplorar.addEventListener("click", async () => {
   );
 
   deepGain.gain.exponentialRampToValueAtTime(
+    0.08,
+    ctx.currentTime + 5
+  );
+
+  deepGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    ctx.currentTime + 6.2
+    ctx.currentTime + 11.5
   );
 
   deep.connect(deepGain);
   deepGain.connect(master);
 
   deep.start();
-  deep.stop(ctx.currentTime + 6.3);
+  deep.stop(ctx.currentTime + 11.7);
 
 
   // =====================================
   // 4. FADE GENERAL
-  // TODO TERMINA GRAVE
   // =====================================
   master.gain.setValueAtTime(
     0.0001,
@@ -1193,25 +1218,32 @@ btnExplorar.addEventListener("click", async () => {
   );
 
   master.gain.exponentialRampToValueAtTime(
-    0.18,
-    ctx.currentTime + 4.0
+    0.22,
+    ctx.currentTime + 5
+  );
+
+  master.gain.exponentialRampToValueAtTime(
+    0.09,
+    ctx.currentTime + 10
   );
 
   master.gain.exponentialRampToValueAtTime(
     0.025,
-    ctx.currentTime + 7.0
+    ctx.currentTime + 15
   );
 
   master.gain.exponentialRampToValueAtTime(
     0.0001,
-    ctx.currentTime + 8.6
+    ctx.currentTime + 19
   );
 
 
-  // Cerrar audio después del eco grave
+  // =========================
+  // CERRAR AUDIO
+  // =========================
   setTimeout(() => {
     ctx.close();
-  }, 9000);
+  }, 20000);
 
 });
 </script>
