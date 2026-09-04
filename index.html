@@ -286,6 +286,65 @@ h2 {
   margin-right: 10px;
 }
 
+    /* =====================================================
+   EL PROTOCOLO DEL ASOMBRO — TRÁILER
+   ===================================================== */
+
+.trailer-asombro {
+  margin-top: 70px;
+  text-align: center;
+}
+
+.trailer-asombro .etiqueta {
+  margin-bottom: 12px;
+}
+
+.trailer-asombro h2 {
+  margin-bottom: 14px;
+}
+
+.trailer-asombro-intro {
+  max-width: 680px;
+  margin: 0 auto 32px;
+  color: var(--gris);
+}
+
+.trailer-video {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 24px;
+  border: 1px solid var(--borde);
+  background: #000;
+  box-shadow: 0 30px 80px rgba(0,0,0,.55);
+}
+
+.trailer-asombro-titulo {
+  margin-top: 28px;
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  letter-spacing: -.025em;
+}
+
+.trailer-asombro-texto {
+  max-width: 650px;
+  margin: 12px auto 25px;
+  color: var(--gris);
+}
+
+@media (max-width: 520px) {
+
+  .trailer-asombro {
+    margin-top: 50px;
+  }
+
+  .trailer-video {
+    border-radius: 18px;
+  }
+
+}
+    
+
 /* VISUAL */
 
 .visual {
@@ -680,6 +739,61 @@ footer {
 
 </section>
 
+  <!-- TRÁILER — EL PROTOCOLO DEL ASOMBRO -->
+
+<section class="trailer-asombro">
+
+  <div class="contenedor">
+
+    <div class="etiqueta">
+      VIVIR LA EXPERIENCIA
+    </div>
+
+    <h2>
+      Hay cosas que solo puedes descubrir cuando empiezas a mirar diferente.
+    </h2>
+
+    <p class="trailer-asombro-intro">
+      Una historia que comienza con una pregunta...
+      y termina cuestionando todo lo que creías conocer.
+    </p>
+
+    <video
+      class="trailer-video"
+      controls
+      preload="metadata"
+      playsinline>
+
+      <source
+        src="Trailer_Protocolo.mp4"
+        type="video/mp4">
+
+      Tu navegador no puede reproducir este video.
+
+    </video>
+
+    <h3 class="trailer-asombro-titulo">
+      EL PROTOCOLO DEL ASOMBRO
+    </h3>
+
+    <p class="trailer-asombro-texto">
+      Una novela para despertar la curiosidad
+      y mirar la realidad con otros ojos.
+    </p>
+
+    <a
+      class="boton boton-principal"
+      href="https://go.hotmart.com/X102779012G"
+      target="_blank"
+      rel="noopener">
+
+      DESCUBRIR EL ASOMBRO
+
+    </a>
+
+  </div>
+
+</section>
 
 <!-- LIBROS -->
 
