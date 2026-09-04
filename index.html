@@ -286,60 +286,76 @@ h2 {
   margin-right: 10px;
 }
 
-    /* =====================================================
-   EL PROTOCOLO DEL ASOMBRO — TRÁILER
+/* =====================================================
+   EXPERIENCIA — EL PROTOCOLO DEL ASOMBRO
    ===================================================== */
 
-.trailer-asombro {
-  margin-top: 70px;
-  text-align: center;
+.experiencia-asombro {
+  padding-top: 110px;
+  padding-bottom: 120px;
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(101,169,212,.10),
+      transparent 45%
+    ),
+    #060908;
 }
 
-.trailer-asombro .etiqueta {
-  margin-bottom: 12px;
+.experiencia-asombro .encabezado {
+  margin-bottom: 38px;
 }
 
-.trailer-asombro h2 {
-  margin-bottom: 14px;
+.experiencia-asombro h2 {
+  color: #f5f7f6;
 }
 
-.trailer-asombro-intro {
-  max-width: 680px;
-  margin: 0 auto 32px;
-  color: var(--gris);
-}
-
-.trailer-video {
-  width: 100%;
-  max-width: 900px;
+.asombro-video {
+  width: min(900px, 100%);
   margin: 0 auto;
+}
+
+.asombro-video video {
+  width: 100%;
   display: block;
   border-radius: 24px;
-  border: 1px solid var(--borde);
+  border: 1px solid rgba(255,255,255,.10);
   background: #000;
-  box-shadow: 0 30px 80px rgba(0,0,0,.55);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.65),
+    0 0 60px rgba(101,169,212,.06);
 }
 
-.trailer-asombro-titulo {
-  margin-top: 28px;
-  font-size: clamp(1.5rem, 4vw, 2.4rem);
-  letter-spacing: -.025em;
+.asombro-final {
+  text-align: center;
+  max-width: 700px;
+  margin: 42px auto 0;
 }
 
-.trailer-asombro-texto {
-  max-width: 650px;
-  margin: 12px auto 25px;
+.asombro-final h3 {
+  font-size: clamp(1.5rem, 4vw, 2.3rem);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.asombro-final p {
   color: var(--gris);
+  margin-bottom: 28px;
 }
 
 @media (max-width: 520px) {
 
-  .trailer-asombro {
-    margin-top: 50px;
+  .experiencia-asombro {
+    padding-top: 80px;
+    padding-bottom: 90px;
   }
 
-  .trailer-video {
-    border-radius: 18px;
+  .asombro-video video {
+    border-radius: 16px;
+  }
+
+  .asombro-final {
+    margin-top: 30px;
   }
 
 }
@@ -1036,12 +1052,20 @@ footer {
           </p>
 
           <a
-            class="boton boton-secundario"
+            class="boton boton-principal"
+            href="#asombro">
+
+            VIVIR LA EXPERIENCIA
+
+          </a>
+
+          <a
+            class="btn-libros"
             href="https://go.hotmart.com/X102779012G"
             target="_blank"
             rel="noopener">
 
-            DESCUBRIR EL ASOMBRO
+            QUIERO EL LIBRO →
 
           </a>
 
@@ -1055,7 +1079,77 @@ footer {
   </div>
 
 </section>
+<!-- =====================================================
+     EXPERIENCIA — EL PROTOCOLO DEL ASOMBRO
+     ===================================================== -->
 
+<section id="asombro" class="experiencia-asombro">
+
+  <div class="contenedor">
+
+    <div class="encabezado">
+
+      <div class="etiqueta">
+        VIVIR LA EXPERIENCIA
+      </div>
+
+      <h2>
+        El Protocolo del Asombro
+      </h2>
+
+      <p>
+        Hay cosas que solo puedes descubrir
+        cuando empiezas a mirar diferente.
+      </p>
+
+    </div>
+
+
+    <div class="asombro-video">
+
+      <video
+        controls
+        preload="metadata"
+        playsinline>
+
+        <source
+          src="Trailer_Protocolo.mp4"
+          type="video/mp4">
+
+        Tu navegador no puede reproducir este video.
+
+      </video>
+
+    </div>
+
+
+    <div class="asombro-final">
+
+      <h3>
+        ¿Y si aquello que crees conocer
+        no fuera exactamente lo que parece?
+      </h3>
+
+      <p>
+        Una novela para despertar la curiosidad
+        y mirar la realidad con otros ojos.
+      </p>
+
+      <a
+        class="boton boton-principal"
+        href="https://go.hotmart.com/X102779012G"
+        target="_blank"
+        rel="noopener">
+
+        DESCUBRIR EL ASOMBRO
+
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
 
 <!-- CIERRE -->
 
